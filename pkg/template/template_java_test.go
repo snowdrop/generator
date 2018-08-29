@@ -6,7 +6,6 @@ import (
 
 	"github.com/shurcooL/httpfs/vfsutil"
 	"testing"
-	"github.com/snowdrop/k8s-supervisor/pkg/template"
 	"net/http"
 )
 

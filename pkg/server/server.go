@@ -32,7 +32,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func Run() {
+func Run(version string, gitcommit string) {
 	// Enable Debug if env var is defined
 	logger.EnableLogLevelDebug()
 
@@ -47,7 +47,7 @@ func Run() {
 	   pathGeneratorDir = t
 	}
 
-	log.Infof("Starting HTTP Server on port %s, exposing endpoint %s",port,"/template/{id}")
+	log.Infof("Starting Spring Boot Generator Server on port %s, exposing endpoint %s - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
 
 	router := mux.NewRouter()
 	router.HandleFunc("/template/{id}", GetProject).Methods("GET")
