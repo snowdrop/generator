@@ -1,6 +1,7 @@
 PROJECT     := github.com/snowdrop/generator
 GITCOMMIT   := $(shell git rev-parse --short HEAD 2>/dev/null)
-BUILD_FLAGS := -ldflags="-w -X $(PROJECT)/main.GITCOMMIT=$(GITCOMMIT) -X $(PROJECT)/main.VERSION=$(VERSION)"
+REMOTE_BUILD_FLAGS := -ldflags="-w -X $(PROJECT)/main.GITCOMMIT=$(GITCOMMIT) -X $(PROJECT)/main.VERSION=$(VERSION)"
+BUILD_FLAGS := -ldflags="-w -X main.GITCOMMIT=$(GITCOMMIT) -X main.VERSION=$(VERSION)"
 GO          ?= go
 GOFMT       ?= $(GO)fmt
 
@@ -19,7 +20,7 @@ build: clean
 	go build ${BUILD_FLAGS} -o generator main.go
 
 cross: clean
-	gox -osarch="darwin/amd64 linux/amd64" -output="dist/bin/{{.OS}}-{{.Arch}}/sb" $(BUILD_FLAGS)
+	gox -osarch="darwin/amd64 linux/amd64" -output="dist/bin/{{.OS}}-{{.Arch}}/generator" $(BUILD_FLAGS)
 
 prepare-release: cross
 	./scripts/prepare_release.sh
