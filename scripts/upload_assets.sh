@@ -22,7 +22,7 @@ GH_TAGS="$GH_REPO/releases/tags/$TAG"
 
 BIN_DIR="./dist/bin/"
 RELEASE_DIR="./dist/release"
-APP="sb"
+APP="generator"
 
 echo "git tag"
 git tag -a $TAG -m "$TAG release"

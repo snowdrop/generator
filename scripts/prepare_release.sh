@@ -4,7 +4,7 @@
 
 BIN_DIR="./dist/bin/"
 RELEASE_DIR="./dist/release/"
-APP="sb"
+APP="generator"
 
 mkdir -p $RELEASE_DIR
 
