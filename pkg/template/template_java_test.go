@@ -7,7 +7,7 @@ import (
 	"github.com/shurcooL/httpfs/vfsutil"
 	"testing"
 	"net/http"
-	"github.com/snowdrop/k8s-supervisor/pkg/template"
+	"github.com/snowdrop/generator/pkg/template"
 )
 
 var (

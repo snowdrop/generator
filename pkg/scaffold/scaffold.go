@@ -13,7 +13,7 @@ import (
 	"github.com/shurcooL/httpfs/vfsutil"
 	log "github.com/sirupsen/logrus"
 
-	tmpl "github.com/snowdrop/k8s-supervisor/pkg/template"
+	tmpl "github.com/snowdrop/generator/pkg/template"
 )
 
 const (
@@ -29,37 +29,6 @@ var (
 	assetsJavaTemplates      = tmpl.Assets
 	templates                = make(map[string]template.Template)
 )
-
-type Project struct {
-	GroupId            string
-	ArtifactId         string
-	Version            string
-	PackageName        string
-	Dependencies	   []string
-	OutDir             string
-
-	SnowdropBomVersion string
-	SpringVersion      string
-	Modules            []Module
-
-	UrlService  	   string
-}
-
-type Config struct {
-	Modules      []Module
-}
-
-type Module struct {
-	Name	     string
-	Description  string
-	Starters     []Starter
-}
-
-type Starter struct {
-	GroupId	     string
-	ArtifactId	 string
-	Scope	     string
-}
 
 func ParseStartersConfigFile(pathTemplateDir string) {
 	if pathTemplateDir == "" {
