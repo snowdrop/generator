@@ -35,7 +35,32 @@ jobs:
     - run:
         name: Perform build
         command: |
-          go build -o server *.go
+          go build -o generator *.go
+
+  # This job needs to be in machine because it has COPY inside the Dockerfile
+  # which cannot be handled in the docker type jobs
+  createImage:
+    machine: true
+
+    steps:
+      - checkout
+
+      - run:
+          name: Build Docker image
+          command: |
+            tagRE='release-(.*)'
+            if [[ "${CIRCLE_TAG}" =~ ${tagRE} ]]; then
+              VERSION=${BASH_REMATCH[1]}
+
+              docker build -t spring-boot-generator:${VERSION} -f docker/Dockerfile_generator .
+              TAG_ID=$(docker images -q spring-boot-generator:${VERSION})
+              docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:${VERSION}
+              docker login quay.io -u="${QUAY_ROBOT_USER}" -p="${QUAY_ROBOT_TOKEN}"
+              docker push quay.io/snowdrop/spring-boot-generator:${VERSION}
+            else
+              echo "${CIRCLE_TAG} does NOT match the expected pattern. This is probably a job configuration issue"
+              exit 1
+            fi
 
   release:
     docker:
@@ -78,6 +103,14 @@ workflows:
   release-build:
     jobs:
     - release:
+        filters:
+          tags:
+            only: /^release-.*$/
+          branches:
+            ignore: /.*/
+    - createImage:
+        requires:
+          - release
         filters:
           tags:
             only: /^release-.*$/
