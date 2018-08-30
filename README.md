@@ -8,7 +8,7 @@ The format of the request is defined as such
 `http://GENERATOR_HOST/template/{id}?param1=val1&param2&val2....`
 
 where :
-  - `{id}`` is one of the templates available, crud, simple, rest, ...
+  - `{id}` is one of the templates available, crud, simple, rest, ...
   - `{groupId}` is the GAV's group
   - `{artifactId}` is the GAV's artifact
   - `{version}` is the GAV's version
