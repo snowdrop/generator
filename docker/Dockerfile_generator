@@ -17,7 +17,7 @@ FROM busybox
 
 ARG GENERATOR_DIR=/opt/generator
 
-RUN mkdir -p ${GENERATOR_DIR}/bin
+RUN mkdir -p ${GENERATOR_DIR}/{bin,config}
 
 COPY --from=builder /go/src/github.com/snowdrop/generator/pkg/scaffold/config/starters.yaml ${GENERATOR_DIR}/config/starters.yaml
 COPY --from=builder /go/src/github.com/snowdrop/generator/server ${GENERATOR_DIR}/bin/
