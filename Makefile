@@ -1,6 +1,5 @@
 PROJECT     := github.com/snowdrop/generator
 GITCOMMIT   := $(shell git rev-parse --short HEAD 2>/dev/null)
-REMOTE_BUILD_FLAGS := -ldflags="-w -X $(PROJECT)/main.GITCOMMIT=$(GITCOMMIT) -X $(PROJECT)/main.VERSION=$(VERSION)"
 BUILD_FLAGS := -ldflags="-w -X main.GITCOMMIT=$(GITCOMMIT) -X main.VERSION=$(VERSION)"
 GO          ?= go
 GOFMT       ?= $(GO)fmt
