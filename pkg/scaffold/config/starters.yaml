@@ -23,7 +23,7 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-  - name: jax-rs
+  - name: jaxrs
     description: "Apache CXF Starter implementing JAX-RS specification"
     starters:
       - artifactid: cxf-spring-boot-starter-jaxrs
@@ -31,8 +31,13 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-  - name: jaxrs
-    description: "Apache CXF Starter implementing JAX-RS specification"
+  - name: hibernate
+    description: "JPA & ORM with Hibernate"
     starters:
-      - artifactid: cxf-spring-boot-starter-jaxrs
-        groupid: org.apache.cxf
+      - artifactid: spring-boot-starter-data-jpa
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-jdbc
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
