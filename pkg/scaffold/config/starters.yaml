@@ -41,3 +41,11 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
+  - name: monitoring
+    description: "Monitor and manage your application using Jolokia, Prometheus, ..."
+    starters:
+      - artifactid: spring-boot-starter-actuator
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
