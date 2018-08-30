@@ -30,7 +30,8 @@ jobs:
 
       # Regenerate the Assets (template such crud, rest, simple, ...)
       - run : |
-          make assets
+          go get -u github.com/shurcooL/vfsgen
+          make -f assets
 
       # Build project
       - run: |
