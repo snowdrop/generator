@@ -14,27 +14,28 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	tmpl "github.com/snowdrop/generator/pkg/template"
+	"fmt"
 )
 
 const (
-	configDirName    = "config"
-	configYamlName   = "starters.yaml"
-	dummyDirName     = "dummy"
+	configDirName  = "config"
+	configYamlName = "starters.yaml"
+	dummyDirName   = "dummy"
 )
 
 var (
-	templateFiles            []string
-	config                   Config
+	templateFiles []string
+	config        Config
 
-	assetsJavaTemplates      = tmpl.Assets
-	templates                = make(map[string]template.Template)
+	assetsJavaTemplates = tmpl.Assets
+	templates           = make(map[string]template.Template)
 )
 
 func ParseStartersConfigFile(pathTemplateDir string) {
 	if pathTemplateDir == "" {
 		pathTemplateDir = "../scaffold"
 	}
-	startersPath := strings.Join([]string{pathTemplateDir, configDirName, configYamlName},"/")
+	startersPath := strings.Join([]string{pathTemplateDir, configDirName, configYamlName}, "/")
 	log.Infof("Parsing Starters's Config at %s", startersPath)
 
 	// Read file and parse it to create a Config's type
@@ -60,7 +61,7 @@ func ParseStartersConfigFile(pathTemplateDir string) {
 	}
 }
 
-func CollectVfsTemplates(t string) {
+func CollectVfsTemplates() {
 
 	walkFn := func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
@@ -73,11 +74,11 @@ func CollectVfsTemplates(t string) {
 		}
 
 		log.Debug("Path of the file to be added as template : " + path)
-		templateFiles = append(templateFiles,path)
+		templateFiles = append(templateFiles, path)
 		return nil
 	}
 
-	errW := vfsutil.Walk(assetsJavaTemplates, t, walkFn)
+	errW := vfsutil.Walk(assetsJavaTemplates, "/", walkFn)
 	if errW != nil {
 		panic(errW)
 	}
@@ -89,7 +90,7 @@ func CollectVfsTemplates(t string) {
 		t := template.New(templateFiles[i])
 
 		// Read Template's content
-		data, err := vfsutil.ReadFile(assetsJavaTemplates,templateFiles[i])
+		data, err := vfsutil.ReadFile(assetsJavaTemplates, templateFiles[i])
 		if err != nil {
 			log.Error(err)
 		}
@@ -101,59 +102,71 @@ func CollectVfsTemplates(t string) {
 	}
 }
 
-func ParseTemplates(dir string, outDir string, project Project) {
-	for _, t := range templates {
+func TEMPParseTemplateSelected(templateSelected string, dir string, outDir string, project Project) {
+	for key, value := range templates {
+		fmt.Println("Key:", key, "Value:", value)
+	}
 
-		log.Infof("Template : %s", t.Name())
-		var b bytes.Buffer
+}
 
-		// Enrich project with starters dependencies if they exist
-		if strings.Contains(t.Name(),"pom.xml") {
-			if project.Dependencies != nil {
-				project = convertDependencyToModule(project.Dependencies, config.Modules, project)
+func ParseTemplateSelected(templateSelected string, dir string, outDir string, project Project) {
+
+	// Pickup from the Map of the Templates, the files corresponding to the type selected by the user
+	for key, t := range templates {
+		if strings.HasPrefix(key,"/" + templateSelected) {
+
+			log.Infof("Template processed : %s", t.Name())
+			var b bytes.Buffer
+
+			// Enrich project with starters dependencies if they exist
+			if strings.Contains(t.Name(), "pom.xml") {
+				if project.Dependencies != nil {
+					project = convertDependencyToModule(project.Dependencies, config.Modules, project)
+				}
 			}
-			log.Infof("Project enriched %+v ",project)
-		}
 
-		// Use template to generate the content
-		err := t.Execute(&b, project)
-		if err != nil {
-			log.Error(err.Error())
-		}
+			// Use template to generate the content
+			err := t.Execute(&b, project)
+			if err != nil {
+				log.Error(err.Error())
+			}
 
-		// Convert Path
-		tFileName := t.Name()
-		pathF := strings.Join([]string{dir,outDir,path.Dir(tFileName)},"/")
-		log.Debugf("## Path : %s",pathF)
-		pathConverted := strings.Replace(pathF,dummyDirName,convertPackageToPath(project.PackageName),-1)
-		log.Debugf("Path converted: ",pathF)
+			// Convert Path
+			tFileName := t.Name()
+			pathF := strings.Join([]string{dir, outDir, path.Dir(tFileName)}, "/")
+			log.Debugf("## Path : %s", pathF)
+			pathConverted := strings.Replace(pathF, dummyDirName, convertPackageToPath(project.PackageName), -1)
+			log.Debugf("Path converted: ", pathF)
 
-		// Convert FileName
-		fileName := strings.Join([]string{dir,outDir,tFileName},"/")
-		log.Debugf("## File name : %s",fileName)
-		fileNameConverted := strings.Replace(fileName,dummyDirName,convertPackageToPath(project.PackageName),-1)
-		log.Debugf("File name converted : ",fileNameConverted)
+			// Convert FileName
+			fileName := strings.Join([]string{dir, outDir, tFileName}, "/")
+			log.Debugf("## File name : %s", fileName)
+			fileNameConverted := strings.Replace(fileName, dummyDirName, convertPackageToPath(project.PackageName), -1)
+			log.Debugf("File name converted : ", fileNameConverted)
 
-		// Create missing folders
-		log.Debugf("Path to generated file : ",pathConverted)
-		os.MkdirAll(pathConverted, os.ModePerm)
+			// Create missing folders
+			log.Debugf("Path to generated file : ", pathConverted)
+			os.MkdirAll(pathConverted, os.ModePerm)
 
-		// Content generated
-		log.Debugf("Content generated : %s",b.Bytes())
+			// Content generated
+			log.Debugf("Content generated : %s", b.Bytes())
 
-		err = ioutil.WriteFile(fileNameConverted, b.Bytes(),0644)
-		if err != nil {
-			log.Error(err.Error())
+			err = ioutil.WriteFile(fileNameConverted, b.Bytes(), 0644)
+			if err != nil {
+				log.Error(err.Error())
+			}
+
 		}
 	}
+	log.Infof("Project enriched %+v ", project)
 }
 
 func convertDependencyToModule(deps []string, modules []Module, p Project) Project {
 	for _, dep := range deps {
 		for _, module := range modules {
 			if module.Name == dep {
-				log.Infof("Match found for dep %s and starters %+v ",dep,module)
-				p.Modules = append(p.Modules,module)
+				log.Infof("Match found for dep %s and starters %+v ", dep, module)
+				p.Modules = append(p.Modules, module)
 			}
 		}
 	}
@@ -161,7 +174,7 @@ func convertDependencyToModule(deps []string, modules []Module, p Project) Proje
 }
 
 func convertPackageToPath(p string) string {
-	c := strings.Replace(p,".","/",-1)
-	log.Debugf("Converted path : ",c)
+	c := strings.Replace(p, ".", "/", -1)
+	log.Debugf("Converted path : ", c)
 	return c
 }
