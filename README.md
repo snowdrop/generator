@@ -77,17 +77,3 @@ To test the docker image, execute this command to create a pod/service and route
 oc new-project generator
 oc create -f docker/generator.yml
 ```
-
-## To test it
-  
-
-Grab the route of the service and next generate a project
-```bash
-sb create -t simple -i ocool -g org.acme.cool -v 1.0.0 -p me.snowdrop.cool -s 1.5.15.RELEASE -b 1.5.15.Final -u http://spring-boot-generator.192.168.65.2.nip.io/
-sb create -t simple -d web -i ocool -g org.acme.cool -v 1.0.0 -p me.snowdrop.cool -s 1.5.15.RELEASE -b 1.5.15.Final -u http://spring-boot-generator.192.168.65.2.nip.io/
-sb create -t simple -d cxf -i ocool -g org.acme.cool -v 1.0.0 -p me.snowdrop.cool -s 1.5.15.RELEASE -b 1.5.15.Final -u http://spring-boot-generator.192.168.65.2.nip.io/
-
-curl http://spring-boot-generator.195.201.87.126.nip.io/template/crud?artifactId=my-spring-boot&bomVersion=1.5.15.Final&groupId=com.example&outDir=&packageName=com.example.demo&springbootVersion=1.5.15.RELEASE&version=1.0 
-
-
-```
