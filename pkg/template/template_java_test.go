@@ -7,7 +7,6 @@ import (
 	"github.com/shurcooL/httpfs/vfsutil"
 	"testing"
 	"net/http"
-	"github.com/snowdrop/generator/pkg/template"
 )
 
 var (
@@ -32,7 +31,7 @@ func TestVfsSimpleJavaProject(t *testing.T) {
 }
 
 func walkTree() []string {
-	var fs http.FileSystem = template.Assets
+	var fs http.FileSystem = Assets
 
 	vfsutil.Walk(fs, project, func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
