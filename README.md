@@ -53,13 +53,14 @@ Unzip the file
 unzip demo.zip
 ```
 
-
 ## To build the Server as container's image
 
 Execute this command at the root of the project
 ```bash
 imagebuilder -t spring-boot-generator:latest -f docker/Dockerfile_generator .
 ```
+
+**WARNING** : The `imagebuilder` tool supports to process multi-stages Dockerfile and can be installed using the following go command `go get -u github.com/openshift/imagebuilder/cmd/imagebuilder`
 
 Tag the docker image and push it to `quay.io`
 
