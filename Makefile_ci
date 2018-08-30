@@ -5,7 +5,7 @@ BUILD_FLAGS := -ldflags="-w -X main.GITCOMMIT=$(GITCOMMIT) -X main.VERSION=$(VER
 GO          ?= go
 GOFMT       ?= $(GO)fmt
 
-# go get -u github.com/shurcooL/vfsgen/cmd/vfsgendev
+# go get -u github.com/shurcooL/vfsgen
 VFSGENDEV   := $(GOPATH)/bin/vfsgendev
 PREFIX      ?= $(shell pwd)
 
