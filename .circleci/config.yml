@@ -24,11 +24,14 @@ jobs:
       - checkout
 
       # Get dependencies and do test
-      - run: go get -v -t -d ./...
-      - run: go test -v ./...
+      - run: |
+          go get -v -t -d ./...
+          go test -v ./...
 
       # Build project
-      - run: go build -o server *.go
+      - run: |
+          go build -o server *.go
+          cp server /tmp/builds
 
       - store_artifacts:
           path: /tmp/builds
