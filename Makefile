@@ -5,8 +5,8 @@ BUILD_FLAGS := -ldflags="-w -X main.GITCOMMIT=$(GITCOMMIT) -X main.VERSION=$(VER
 GO          ?= go
 GOFMT       ?= $(GO)fmt
 
-# go get -u github.com/shurcooL/vfsgen/cmd/vfsgendev
 VFSGENDEV   := $(GOPATH)/bin/vfsgendev
+VFSGENDEV_SRC := $(GOPATH)/src/github.com/shurcooL/vfsgen
 PREFIX      ?= $(shell pwd)
 
 all: clean build
@@ -41,8 +41,11 @@ assets: $(VFSGENDEV)
 	@echo ">> writing assets"
 	cd $(PREFIX)/pkg/template && go generate
 
-$(VFSGENDEV):
-	cd $(PREFIX)/vendor/github.com/shurcooL/vfsgen/ && go install ./cmd/vfsgendev/...
+$(VFSGENDEV): $(VFSGENDEV_SRC)
+	go get -u github.com/shurcooL/vfsgen/cmd/vfsgendev
+
+$(VFSGENDEV_SRC):
+	go get -u github.com/shurcooL/vfsgen
 
 gofmt:
 	@echo ">> checking code style"
