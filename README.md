@@ -8,12 +8,12 @@ The format of the request is defined as such
 `http://GENERATOR_HOST/template/{id}?param1=val1&param2&val2....`
 
 where :
-  - `{id}` is one of the templates available, crud, simple, rest, ...
+  - `{id}` is one of the templates available: crud, simple, rest, ...
   - `{groupId}` is the GAV's group
   - `{artifactId}` is the GAV's artifact
   - `{version}` is the GAV's version
-  - `{packageName}` is the name og the Java package
-  - `{dependencies}` are the starters/modules thqt we offer : web, security, jax-rs, ...
+  - `{packageName}` is the name of the Java package
+  - `{dependencies}` are the starters/modules that we propose : web, security, jax-rs, ...
   - `{bomVersion}` is the Spring Boot BOM version (1.5.x, ....) 
   - `{springbootVersion}` is the Snowdrop Bom version 
 
