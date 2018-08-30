@@ -28,6 +28,10 @@ jobs:
           go get -v -t -d ./...
           go test -v ./...
 
+      # Regenerate the Assets (template such crud, rest, simple, ...)
+      - run : |
+          make assets
+
       # Build project
       - run: |
           go build -o server *.go
