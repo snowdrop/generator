@@ -35,7 +35,7 @@ jobs:
       # Build project
       - run: |
           go build -o server *.go
-          cp server /tmp/builds/server
+          cp server /tmp/server
 
       - store_artifacts:
-          path: /tmp/builds
+          path: /tmp/server
