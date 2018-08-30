@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/snowdrop/generator/pkg/server"
+	"os"
 )
 
 var (
@@ -15,5 +16,14 @@ var (
 )
 
 func main() {
+
+	// Check env vars
+	v := os.Getenv("VERSION")
+	if v != "" {
+		VERSION = v
+	} else {
+		VERSION = "v0.0.0"
+	}
+
 	server.Run(VERSION, GITCOMMIT)
 }
