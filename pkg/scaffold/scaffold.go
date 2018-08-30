@@ -14,7 +14,6 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	tmpl "github.com/snowdrop/generator/pkg/template"
-	"fmt"
 )
 
 const (
@@ -30,6 +29,16 @@ var (
 	assetsJavaTemplates = tmpl.Assets
 	templates           = make(map[string]template.Template)
 )
+
+func NewDefaultScaffoldProject() *Project {
+	return &Project{
+		GroupId: "com.example",
+		ArtifactId: "demo",
+		Version: "0.0.1-SNAPSHOT",
+		SnowdropBomVersion: "1.5.15.Final",
+		SpringVersion: "1.5.15.RELEASE",
+	}
+}
 
 func ParseStartersConfigFile(pathTemplateDir string) {
 	if pathTemplateDir == "" {
@@ -100,13 +109,6 @@ func CollectVfsTemplates() {
 		}
 		templates[templateFiles[i]] = *t
 	}
-}
-
-func TEMPParseTemplateSelected(templateSelected string, dir string, outDir string, project Project) {
-	for key, value := range templates {
-		fmt.Println("Key:", key, "Value:", value)
-	}
-
 }
 
 func ParseTemplateSelected(templateSelected string, dir string, outDir string, project Project) {
