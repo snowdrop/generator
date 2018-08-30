@@ -26,7 +26,7 @@ var (
 	pathGeneratorDir = ""
 	tmpDirName       = "_temp"
 	letterRunes      = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	p				 = scaffold.Project{}
+	p				 = *scaffold.NewDefaultScaffoldProject()
 )
 
 func init() {
@@ -75,14 +75,14 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	ids := mux.Vars(r)
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 
-	p.GroupId = getUrlVal(r,"groupId")
-	p.ArtifactId = getUrlVal(r,"artifactId")
-	p.Version = getUrlVal(r,"version")
-	p.PackageName = getUrlVal(r,"packageName")
-	p.Dependencies = getArrayVal(r,"dependencies",params)
-	p.SnowdropBomVersion = getUrlVal(r,"bomVersion")
-	p.SpringVersion = getUrlVal(r,"springbootVersion")
-	p.OutDir = getUrlVal(r,"outDir")
+	if getUrlVal(r,"groupId") != "" { p.GroupId = getUrlVal(r,"groupId")}
+	if getUrlVal(r,"") != "" {p.ArtifactId = getUrlVal(r,"artifactId")}
+	if getUrlVal(r,"") != "" {p.Version = getUrlVal(r,"version")}
+	if getUrlVal(r,"") != "" {p.PackageName = getUrlVal(r,"packageName")}
+	if getUrlVal(r,"") != "" {p.Dependencies = getArrayVal(r,"dependencies",params)}
+	if getUrlVal(r,"") != "" {p.SnowdropBomVersion = getUrlVal(r,"bomVersion")}
+	if getUrlVal(r,"") != "" {p.SpringVersion = getUrlVal(r,"springbootVersion")}
+	if getUrlVal(r,"") != "" {p.OutDir = getUrlVal(r,"outDir")}
 
 	log.Info("Project : ",p)
 	log.Info("Params : ",ids)
