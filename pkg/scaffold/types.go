@@ -11,6 +11,7 @@ type Project struct {
 	SnowdropBomVersion string
 	SpringVersion      string
 	Modules            []Module
+	Starters		   []Starter
 
 	UrlService  	   string
 }

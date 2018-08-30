@@ -127,6 +127,14 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 				}
 			}
 
+			// Remove Starter duplicates
+			RemoveDuplicates(&project.Starters)
+
+			// log.Debug("Remove duplicates")
+			// for _, starter := range project.Starters {
+			//  		log.Info("No duplicate Starter : ", starter.ArtifactId)
+			// }
+
 			// Use template to generate the content
 			err := t.Execute(&b, project)
 			if err != nil {
@@ -169,10 +177,26 @@ func convertDependencyToModule(deps []string, modules []Module, p Project) Proje
 			if module.Name == dep {
 				log.Infof("Match found for dep %s and starters %+v ", dep, module)
 				p.Modules = append(p.Modules, module)
+				for _, starter := range module.Starters {
+					p.Starters = append(p.Starters,starter)
+				}
 			}
 		}
 	}
 	return p
+}
+
+func RemoveDuplicates(starters *[]Starter) {
+	found := make(map[string]bool)
+	j := 0
+	for i, x := range *starters {
+		if !found[x.ArtifactId] {
+			found[x.ArtifactId] = true
+			(*starters)[j] = (*starters)[i]
+			j++
+		}
+	}
+	*starters = (*starters)[:j]
 }
 
 func convertPackageToPath(p string) string {
