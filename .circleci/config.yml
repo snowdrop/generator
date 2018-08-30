@@ -30,7 +30,7 @@ jobs:
 
       # Regenerate the Assets (template such crud, rest, simple, ...)
       - run : |
-          make assets
+          make -f Makefile_ci assets
 
       # Build project
       - run: |
