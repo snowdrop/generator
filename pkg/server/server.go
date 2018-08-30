@@ -26,16 +26,10 @@ var (
 	pathGeneratorDir = ""
 	tmpDirName       = "_temp"
 	letterRunes      = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	p				 = scaffold.Project{}
 )
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
-func Run(version string, gitcommit string) {
-	// Enable Debug if env var is defined
-	logger.EnableLogLevelDebug()
-
 	// Check env vars
 	s := os.Getenv("SERVER_PORT")
 	if s != "" {
@@ -44,13 +38,23 @@ func Run(version string, gitcommit string) {
 
 	t := os.Getenv("GENERATOR_PATH")
 	if t != "" {
-	   pathGeneratorDir = t
+		pathGeneratorDir = t
 	}
+
+	// Parse Starters Config YAML file to load the starters associated to a module (web, ...)
+	scaffold.ParseStartersConfigFile(pathGeneratorDir)
+
+	rand.Seed(time.Now().UnixNano())
+}
+
+func Run(version string, gitcommit string) {
+	// Enable Debug if env var is defined
+	logger.EnableLogLevelDebug()
 
 	log.Infof("Starting Spring Boot Generator Server on port %s, exposing endpoint %s - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/template/{id}", GetProject).Methods("GET")
+	router.HandleFunc("/template/{id}", CreateZipFile).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":" + port, router))
 }
@@ -63,26 +67,23 @@ func getArrayVal(r *http.Request, k string, params map[string][]string) []string
 	return params[k]
 }
 
-func GetProject(w http.ResponseWriter, r *http.Request) {
+//Process the HTTP GET Raw Request and populate a zip file as HTTP Response
+func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	ids := mux.Vars(r)
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 
-	p := scaffold.Project{
-		GroupId: getUrlVal(r,"groupId"),
-		ArtifactId: getUrlVal(r,"artifactId"),
-		Version: getUrlVal(r,"version"),
-		PackageName: getUrlVal(r,"packageName"),
-		Dependencies: getArrayVal(r,"dependencies",params),
-		SnowdropBomVersion: getUrlVal(r,"bomVersion"),
-		SpringVersion: getUrlVal(r,"springbootVersion"),
-		OutDir: getUrlVal(r,"outDir"),
-	}
+	p.GroupId = getUrlVal(r,"groupId")
+	p.ArtifactId = getUrlVal(r,"artifactId")
+	p.Version = getUrlVal(r,"version")
+	p.PackageName = getUrlVal(r,"packageName")
+	p.Dependencies = getArrayVal(r,"dependencies",params)
+	p.SnowdropBomVersion = getUrlVal(r,"bomVersion")
+	p.SpringVersion = getUrlVal(r,"springbootVersion")
+	p.OutDir = getUrlVal(r,"outDir")
+
 	log.Info("Project : ",p)
 	log.Info("Params : ",ids)
 	log.Infof("Request received : %s", r.URL)
-
-	// Parse Starters Config YAML file to load the starters associated to a module (web, ...)
-	scaffold.ParseStartersConfigFile(pathGeneratorDir)
 
 	// Collect the java projects's template (simple, rest, ...) defined within the package template
 	scaffold.CollectVfsTemplates(ids["id"])
