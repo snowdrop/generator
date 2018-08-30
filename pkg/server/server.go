@@ -76,13 +76,13 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 
 	if getUrlVal(r,"groupId") != "" { p.GroupId = getUrlVal(r,"groupId")}
-	if getUrlVal(r,"") != "" {p.ArtifactId = getUrlVal(r,"artifactId")}
-	if getUrlVal(r,"") != "" {p.Version = getUrlVal(r,"version")}
-	if getUrlVal(r,"") != "" {p.PackageName = getUrlVal(r,"packageName")}
-	if getUrlVal(r,"") != "" {p.Dependencies = getArrayVal(r,"dependencies",params)}
-	if getUrlVal(r,"") != "" {p.SnowdropBomVersion = getUrlVal(r,"bomVersion")}
-	if getUrlVal(r,"") != "" {p.SpringVersion = getUrlVal(r,"springbootVersion")}
-	if getUrlVal(r,"") != "" {p.OutDir = getUrlVal(r,"outDir")}
+	if getUrlVal(r,"artifactID") != "" {p.ArtifactId = getUrlVal(r,"artifactId")}
+	if getUrlVal(r,"version") != "" {p.Version = getUrlVal(r,"version")}
+	if getUrlVal(r,"packageName") != "" {p.PackageName = getUrlVal(r,"packageName")}
+	if len(getArrayVal(r,"dependencies",params)) > 0 {p.Dependencies = getArrayVal(r,"dependencies",params)}
+	if getUrlVal(r,"bomVersion") != "" {p.SnowdropBomVersion = getUrlVal(r,"bomVersion")}
+	if getUrlVal(r,"springbootVersion") != "" {p.SpringVersion = getUrlVal(r,"springbootVersion")}
+	if getUrlVal(r,"outDir") != "" {p.OutDir = getUrlVal(r,"outDir")}
 
 	log.Info("Project : ",p)
 	log.Info("Params : ",ids)
