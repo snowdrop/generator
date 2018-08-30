@@ -1,4 +1,12 @@
 modules:
+  - name: core
+    description: "Core dependencies of a Spring Boot application"
+    starters:
+      - artifactid: spring-boot-starter
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
   - name: web
     description: "Web"
     starters:
@@ -7,11 +15,24 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-  - name: cxf
-    description: "Apache CXF Starter implementing JAX-RS"
+  - name: websocket
+    description: "Websocket full-duplex communication and streaming of messages"
+    starters:
+      - artifactid: spring-boot-starter-websocket
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: jax-rs
+    description: "Apache CXF Starter implementing JAX-RS specification"
     starters:
       - artifactid: cxf-spring-boot-starter-jaxrs
         groupid: org.apache.cxf
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
+  - name: jaxrs
+    description: "Apache CXF Starter implementing JAX-RS specification"
+    starters:
+      - artifactid: cxf-spring-boot-starter-jaxrs
+        groupid: org.apache.cxf
