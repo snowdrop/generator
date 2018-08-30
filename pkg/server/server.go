@@ -79,6 +79,7 @@ func GetProject(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Info("Project : ",p)
 	log.Info("Params : ",ids)
+	log.Infof("Request received : %s", r.URL)
 
 	// Parse Starters Config YAML file to load the starters associated to a module (web, ...)
 	scaffold.ParseStartersConfigFile(pathGeneratorDir)
