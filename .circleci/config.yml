@@ -29,3 +29,6 @@ jobs:
 
       # Build project
       - run: go build -o server *.go
+
+      - store_artifacts:
+          path: /tmp/builds
