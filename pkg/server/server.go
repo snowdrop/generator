@@ -58,14 +58,13 @@ func init() {
 }
 
 func Run(version string, gitcommit string) {
-	log.Infof("Starting Spring Boot Generator Server on port - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
+	log.Infof("Starting Spring Boot Generator Server on port %s - Version %s (%s)",port,version,gitcommit)
 	log.Infof("The following REST endpoints are available : ")
-	log.Infof("Generate project : %s","/template/{id}")
+	log.Infof("Generate zip : %s","/app")
 	log.Infof("Config : %s","/config")
 
-
 	router := mux.NewRouter()
-	router.HandleFunc("/template/{id}", CreateZipFile).Methods("GET")
+	router.HandleFunc("/app", CreateZipFile).Methods("GET")
 	router.HandleFunc("/config", func(resp http.ResponseWriter, request *http.Request) {
 		r, _ := json.Marshal(scaffold.GetConfig())
 		fmt.Fprintf(resp,"%s",r)
@@ -84,9 +83,9 @@ func getArrayVal(r *http.Request, k string, params map[string][]string) []string
 
 //Process the HTTP GET Raw Request and populate a zip file as HTTP Response
 func CreateZipFile(w http.ResponseWriter, r *http.Request) {
-	ids := mux.Vars(r)
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 
+	if getUrlVal(r,"template") != "" { p.Template = getUrlVal(r,"template")}
 	if getUrlVal(r,"groupId") != "" { p.GroupId = getUrlVal(r,"groupId")}
 	if getUrlVal(r,"artifactID") != "" {p.ArtifactId = getUrlVal(r,"artifactId")}
 	if getUrlVal(r,"version") != "" {p.Version = getUrlVal(r,"version")}
@@ -96,8 +95,14 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	if getUrlVal(r,"springbootVersion") != "" {p.SpringVersion = getUrlVal(r,"springbootVersion")}
 	if getUrlVal(r,"outDir") != "" {p.OutDir = getUrlVal(r,"outDir")}
 
+	// As dependencies and template selection can't be used together, we force the template to be equal to "simple"
+	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
+	// which are incompatible or not fully tested with the template proposed
+	if len(getArrayVal(r,"dependencies",params)) > 0 && p.Template != "simple" {
+		p.Template = "simple"
+	}
+
 	log.Info("Project : ",p)
-	log.Info("Params : ",ids)
 	log.Infof("Request received : %s", r.URL)
 
 	// Generate a random temp directory where populated files will be saved
@@ -105,10 +110,10 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	log.Infof("Temp dir %s",tmpdir)
 
 	// Parse the java project's template selected and enrich the scaffold.Project with the dependencies (if they are)
-	scaffold.ParseTemplateSelected(ids["id"],currentDir,tmpdir,p)
+	scaffold.ParseTemplateSelected(p.Template,currentDir,tmpdir,p)
 	log.Info("Project generated")
 
-	zipDir := strings.Join([]string{tmpdir,ids["id"],"/"},"/")
+	zipDir := strings.Join([]string{tmpdir,p.Template,"/"},"/")
 	handleZip(w,zipDir)
 	log.Info("Zip populated")
 
@@ -125,7 +130,7 @@ func removeTempDir(tmpdir string) {
 
 // Generate Zip file to be returned as HTTP Response
 func handleZip(w http.ResponseWriter,tmpdir string) {
-	zipFilename := "generated.zip"
+	zipFilename := "demo.zip"
 	w.Header().Set("Content-Type", "application/zip")
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", zipFilename))
 
