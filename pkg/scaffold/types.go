@@ -17,7 +17,14 @@ type Project struct {
 }
 
 type Config struct {
-	Modules      []Module
+	Template     []string  `yaml:"templates"`
+	Bom          []Bom     `yaml:"boms"`
+	Module       []Module  `yaml"module"`
+}
+
+type Bom struct {
+	Community string `yaml:"community version"`
+	Snowdrop  string `yaml:"snowdrop version"`
 }
 
 type Module struct {
