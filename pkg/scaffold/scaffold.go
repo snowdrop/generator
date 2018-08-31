@@ -2,7 +2,6 @@ package scaffold
 
 import (
 	"bytes"
-	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path"
@@ -17,8 +16,7 @@ import (
 )
 
 const (
-	configDirName  = "config"
-	configYamlName = "starters.yaml"
+	configYamlName = "generator.yaml"
 	dummyDirName   = "dummy"
 )
 
@@ -40,11 +38,9 @@ func NewDefaultScaffoldProject() *Project {
 	}
 }
 
-func ParseStartersConfigFile(pathTemplateDir string) {
-	if pathTemplateDir == "" {
-		pathTemplateDir = "../scaffold"
-	}
-	startersPath := strings.Join([]string{pathTemplateDir, configDirName, configYamlName}, "/")
+func ParseStartersConfigFile(pathConfigMap string) {
+
+	startersPath := strings.Join([]string{pathConfigMap, configYamlName}, "/")
 	log.Infof("Parsing Starters's Config at %s", startersPath)
 
 	// Read file and parse it to create a Config's type
@@ -63,9 +59,10 @@ func ParseStartersConfigFile(pathTemplateDir string) {
 	}
 
 	if log.GetLevel() == log.DebugLevel {
-		log.Debug("Starters's config")
-		log.Debug("--------------------")
-		s, _ := json.Marshal(&config)
+		log.Debug("-------------------")
+		log.Debug("Generator's config")
+		log.Debug("-------------------")
+		s, _ := yaml.Marshal(&config)
 		log.Debug(string(s))
 	}
 }
@@ -123,17 +120,18 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 			// Enrich project with starters dependencies if they exist
 			if strings.Contains(t.Name(), "pom.xml") {
 				if project.Dependencies != nil {
-					project = convertDependencyToModule(project.Dependencies, config.Modules, project)
+					project = convertDependencyToModule(project.Dependencies, config.Module, project)
 				}
 			}
 
 			// Remove Starter duplicates
 			RemoveDuplicates(&project.Starters)
 
-			// log.Debug("Remove duplicates")
-			// for _, starter := range project.Starters {
-			//  		log.Info("No duplicate Starter : ", starter.ArtifactId)
-			// }
+			if log.GetLevel() == log.DebugLevel {
+				for _, starter := range project.Starters {
+				 		log.Info("No duplicate Starter : ", starter.ArtifactId)
+				}
+			}
 
 			// Use template to generate the content
 			err := t.Execute(&b, project)
