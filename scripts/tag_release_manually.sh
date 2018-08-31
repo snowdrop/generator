@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TAG_ID="release-"$1
-GITHUB_API_TOKEN=$2
+TAG_ID=$2
+GITHUB_API_TOKEN=$1
 
 OWNER="snowdrop"
 REPO="generator"
