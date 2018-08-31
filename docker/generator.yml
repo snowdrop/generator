@@ -37,18 +37,6 @@ items:
           - containerPort: 8080
             name: http
             protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 180
           securityContext:
             privileged: false
     triggers:
