@@ -6,7 +6,7 @@ oc project generator
 # Delete existing resources
 echo "# Delete generator's k8s resources"
 oc delete cm/generator-configmap
-oc delete -f docker/generator.yml
+oc delete -f docker/generator-application.yml
 
 echo "# Populate a new ConfigMap"
 oc create configmap generator-configmap --from-file=conf/generator.yaml

@@ -28,9 +28,9 @@ items:
                 fieldPath: metadata.namespace
           - name: SERVER_PORT
             value: '8080'
-          - name: GENERATOR_PATH
-            value: '/opt/generator'
-          image: spring-boot-generator:latest
+          - name: CONFIGMAP_PATH
+            value: '/etc/config'
+          image: quay.io/snowdrop/spring-boot-generator:latest
           imagePullPolicy: Always
           name: spring-boot-generator
           ports:
@@ -89,7 +89,7 @@ items:
     name: spring-boot-generator
   spec:
     tags:
-    - name: "latest"
+    - name: latest
       from:
         kind: DockerImage
         name: quay.io/snowdrop/spring-boot-generator:latest
