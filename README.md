@@ -5,10 +5,10 @@ and GAV information.
 
 The format of the request is defined as such
 
-`http://GENERATOR_HOST/template/{id}?param1=val1&param2&val2....`
+`http://GENERATOR_HOST/app?param1=val1&param2&val2....`
 
-where :
-  - `{id}` is one of the templates available: crud, simple, rest, ...
+where parameters could be :
+  - `{template}` is one of the templates available: crud, simple, rest, ...
   - `{groupId}` is the GAV's group
   - `{artifactId}` is the GAV's artifact
   - `{version}` is the GAV's version
@@ -22,14 +22,17 @@ where :
 Start the go generator server
 
 ```bash
-GENERATOR_PATH=pkg/scaffold go run main.go
-INFO[0000] Starting Spring Boot Generator Server on port 8000, exposing endpoint /template/{id}` - Version : v0.0.0 (HEAD) 
+CONFIGMAP_PATH=conf go run main.go
+time="2018-08-31T16:18:01Z" level=info msg="Starting Spring Boot Generator Server on port 8080 - Version 0.0.5 (4462d0b)"
+time="2018-08-31T16:18:01Z" level=info msg="The following REST endpoints are available : "
+time="2018-08-31T16:18:01Z" level=info msg="Generate zip : /app"
+time="2018-08-31T16:18:01Z" level=info msg="Config : /config"
 ```
 
 Next, in a separate terminal window, execute a `curl` or `httpie` request
 
 ```bash
-curl http://localhost:8000/template/crud \
+curl http://localhost:8000/app \
   -o demo.zip \
   -d bomVersion=1.5.15.Final \
   -d groupId=com.example \
@@ -38,7 +41,7 @@ curl http://localhost:8000/template/crud \
   -d packageName=com.example.demo \
   -d springbootVersion=1.5.15.RELEASE
   
-http :8000/template/crud \
+http :8000/app \
   bomVersion==1.5.15.Final \
   groupId==com.example \
   artifactId==my-spring-boot \
@@ -76,5 +79,5 @@ docker push quay.io/snowdrop/spring-boot-generator
 To test the docker image, execute this command to create a pod/service and route
 ```bash
 oc new-project generator
-oc create -f docker/generator.yml
+oc create -f docker/generator-application.yml
 ```
