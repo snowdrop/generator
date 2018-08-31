@@ -27,11 +27,11 @@ which is published on `quay.io`.
 
 **Note**: This assumes that the `QUAY_ROBOT_USER` and `QUAY_ROBOT_TOKEN` has been set in the CircleCI UI for the job
 
-When the process is terminated, you can delete the temporary release and tag created under GitHub using the following bash script
+When the process terminates, the temporary release and tag created under GitHub (`release-0.0.1` in the example above) are automatically deleted using
 
-```bash
-./script/delete_release_manually.sh GITHUB_API_TOKEN VERSION
-```
+`./script/delete_release_manually.sh GITHUB_API_TOKEN VERSION`
+
+If for whatever reason you want to delete a tag/release manually, here is an example:
 
 Example
 
