@@ -61,7 +61,7 @@ items:
   metadata:
     labels:
       app: spring-boot-generator
-    name: spring-boot
+    name: spring-boot-generator
   spec:
     ports:
     - name: 8000-tcp
@@ -76,13 +76,13 @@ items:
   metadata:
     labels:
       app: spring-boot-generator
-    name: spring-boot-generator
+    name: spring-boot
   spec:
     port:
       targetPort: 8000-tcp
     to:
       kind: Service
-      name: spring-boot
+      name: spring-boot-generator
 - apiVersion: v1
   kind: ImageStream
   metadata:
