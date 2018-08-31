@@ -58,7 +58,7 @@ func init() {
 }
 
 func Run(version string, gitcommit string) {
-	log.Infof("Starting Spring Boot Generator Server on port - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
+	log.Infof("Starting Spring Boot Generator Server on port %s - Version : %s (%s)",port,version,gitcommit)
 	log.Infof("The following REST endpoints are available : ")
 	log.Infof("Generate project : %s","/template/{id}")
 	log.Infof("Config : %s","/config")
