@@ -27,5 +27,5 @@ curl -X DELETE \
 # Delete also the Tag
 curl -X DELETE \
      -H "$AUTH" \
-     GH_REFS/$TAG_ID
+     $GH_REFS/$TAG_ID
 
