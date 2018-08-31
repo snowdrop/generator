@@ -8,7 +8,13 @@ where `SOME_VERSION` could be for example `0.2`
 This will cause CircleCI to perform a release and will create a GitHub release named `v0.2`
 that will contain the built binaries for both MacOS and Linux
 
-**Note**: This assumes that the `GITHUB_API_TOKEN` has been set in the CircleCI UI for the job  
+**Note**: This assumes that the `GITHUB_API_TOKEN` has been set in the CircleCI UI for the job
+
+### Docker images
+
+When performing a release this, the docker image `snowdrop/spring-boot-generator:${version}` will also be published on `quay.io`.
+**Note**: This assumes that the `QUAY_ROBOT_USER` and `QUAY_ROBOT_TOKEN` has been set in the CircleCI UI for the job
+    
 
 ## The manual way
 
