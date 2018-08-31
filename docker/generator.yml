@@ -37,8 +37,15 @@ items:
           - containerPort: 8080
             name: http
             protocol: TCP
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
           securityContext:
             privileged: false
+        volumes:
+          - name: config-volume
+            configMap:
+              name: generator-configmap
     triggers:
     - type: ConfigChange
     - imageChangeParams:
