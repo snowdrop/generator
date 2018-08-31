@@ -9,6 +9,7 @@ AUTH="Authorization: token $GITHUB_API_TOKEN"
 GH_API="https://api.github.com"
 GH_REPO="$GH_API/repos/$OWNER/$REPO"
 GH_TAGS="$GH_REPO/releases/tags/$TAG_ID"
+GH_REFS="$GH_REPO/git/refs/tags"
 
 # Read asset tags.
 response=$(curl -sH "$AUTH" $GH_TAGS)
@@ -22,3 +23,9 @@ echo "ID : $id"
 curl -X DELETE \
      -H "$AUTH" \
      $GH_REPO/releases/$id
+
+# Delete also the Tag
+curl -X DELETE \
+     -H "$AUTH" \
+     GH_REFS/$TAG_ID
+
