@@ -12,4 +12,4 @@ echo "# Populate a new ConfigMap"
 oc create configmap generator-configmap --from-file=conf/generator.yaml
 
 echo "# Deploy the generator k8s resources"
-oc apply -f docker/generator.yml
+oc apply -f docker/generator-application.yml
