@@ -1,0 +1,62 @@
+template:
+  - crud
+  - rest
+  - simple
+bom:
+  - community : 1.5.15.RELEASE
+    snowdrop: 1.5.15.Final
+  - community : 1.5.14.RELEASE
+    snowdrop: 1.5.14.Final
+  - community : 1.5.13.RELEASE
+    snowdrop: 1.5.13.Final
+module:
+  - name: core
+    description: "Core dependencies of a Spring Boot application"
+    starters:
+      - artifactid: spring-boot-starter
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: web
+    description: "Web"
+    starters:
+      - artifactid: spring-boot-starter-web
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: websocket
+    description: "Websocket full-duplex communication and streaming of messages"
+    starters:
+      - artifactid: spring-boot-starter-websocket
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: jaxrs
+    description: "Apache CXF Starter implementing JAX-RS specification"
+    starters:
+      - artifactid: cxf-spring-boot-starter-jaxrs
+        groupid: org.apache.cxf
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: hibernate
+    description: "JPA & ORM with Hibernate"
+    starters:
+      - artifactid: spring-boot-starter-data-jpa
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-jdbc
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: monitoring
+    description: "Monitor and manage your application using Jolokia, Prometheus, ..."
+    starters:
+      - artifactid: spring-boot-starter-actuator
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
