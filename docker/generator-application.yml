@@ -31,7 +31,7 @@ items:
           - name: GENERATOR_PATH
             value: '/opt/generator'
           image: spring-boot-generator:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: spring-boot-generator
           ports:
           - containerPort: 8080
