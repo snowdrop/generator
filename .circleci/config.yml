@@ -55,7 +55,7 @@ jobs:
               docker build -t spring-boot-generator:${VERSION} -f docker/Dockerfile_generator .
               TAG_ID=$(docker images -q spring-boot-generator:${VERSION})
               docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:${VERSION}
-              docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generatorlatest
+              docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:latest
               docker login quay.io -u="${QUAY_ROBOT_USER}" -p="${QUAY_ROBOT_TOKEN}"
               docker push quay.io/snowdrop/spring-boot-generator:${VERSION}
               docker push quay.io/snowdrop/spring-boot-generator:latest
