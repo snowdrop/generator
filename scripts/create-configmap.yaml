@@ -1,3 +1,0 @@
-#!/bin/bash
-
-oc create configmap generator-configmap --from-file=conf/generator.yaml
