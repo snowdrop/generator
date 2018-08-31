@@ -14,35 +14,41 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/snowdrop/generator/pkg/scaffold"
-	"github.com/snowdrop/generator/pkg/common/logger"
-
 
 	"net/url"
+	"github.com/snowdrop/generator/pkg/common/logger"
 )
 
 var (
 	currentDir, _    = os.Getwd()
 	port			 = "8000"
-	pathGeneratorDir = ""
+	pathConfigMap    = ""
 	tmpDirName       = "_temp"
 	letterRunes      = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	p				 = *scaffold.NewDefaultScaffoldProject()
 )
 
 func init() {
+	// Enable Debug level mode if ENV LOG_LEVEL=debug is defined
+	logger.EnableLogLevelDebug()
+	log.Print("Log level : ",log.GetLevel())
+
 	// Check env vars
 	s := os.Getenv("SERVER_PORT")
 	if s != "" {
 		port = s
 	}
 
-	t := os.Getenv("GENERATOR_PATH")
-	if t != "" {
-		pathGeneratorDir = t
+	cm := os.Getenv("CONFIGMAP_PATH")
+	if cm != "" {
+		pathConfigMap = cm
 	}
 
-	// Parse Starters Config YAML file to load the starters associated to a module (web, ...)
-	scaffold.ParseStartersConfigFile(pathGeneratorDir)
+	// Parse Generator Config YAML file to load :
+	// - Templates available : crud, rest, sumple, ...
+	// - Different Snowdrop/Community BOMs
+	// - Modules and their dependencies associated / the starters
+	scaffold.ParseStartersConfigFile(pathConfigMap)
 
 	// Create the Go Templates from the Spring Boot template directory (crud, web, simple, ....)
 	scaffold.CollectVfsTemplates()
@@ -51,9 +57,6 @@ func init() {
 }
 
 func Run(version string, gitcommit string) {
-	// Enable Debug if env var is defined
-	logger.EnableLogLevelDebug()
-
 	log.Infof("Starting Spring Boot Generator Server on port %s, exposing endpoint %s - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
 
 	router := mux.NewRouter()
