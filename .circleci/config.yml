@@ -52,13 +52,16 @@ jobs:
             if [[ "${CIRCLE_TAG}" =~ ${tagRE} ]]; then
               VERSION=${BASH_REMATCH[1]}
 
-              docker build -t spring-boot-generator:${VERSION} -f docker/Dockerfile_generator .
+              docker build -t spring-boot-generator:${VERSION} -f docker/Dockerfile_generator --build-arg VERSION=${VERSION} --build-arg GITCOMMIT=$(git rev-parse --short HEAD 2>/dev/null) .
               TAG_ID=$(docker images -q spring-boot-generator:${VERSION})
               docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:${VERSION}
               docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:latest
               docker login quay.io -u="${QUAY_ROBOT_USER}" -p="${QUAY_ROBOT_TOKEN}"
               docker push quay.io/snowdrop/spring-boot-generator:${VERSION}
               docker push quay.io/snowdrop/spring-boot-generator:latest
+
+              # Remove the trigger tag
+              scripts/delete_release_manually.sh "${GITHUB_API_TOKEN}" "${CIRCLE_TAG}"
             else
               echo "${CIRCLE_TAG} does NOT match the expected pattern. This is probably a job configuration issue"
               exit 1
@@ -92,9 +95,6 @@ jobs:
             # This will use gox to create the artifacts and the scripts in scripts to do the actual release
             # For the is to work, the GITHUB_API_TOKEN env var needs to be set in the CircleCI config
             make upload VERSION=${BASH_REMATCH[1]}
-
-            # Remove the trigger tag
-            scripts/delete_release_manually.sh "${GITHUB_API_TOKEN}" "${CIRCLE_TAG}"
           else
             echo "${CIRCLE_TAG} does NOT match the expected pattern. This is probably a job configuration issue"
             exit 1

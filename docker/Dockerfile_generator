@@ -2,6 +2,9 @@
 # which upon invocation will create the necessary 'supervisor.conf' file
 FROM golang:1.9.4 as builder
 
+ARG VERSION=unset
+ARG GITCOMMIT=HEAD
+
 # Copy the local project to the go directory to the container's workspace
 ADD . /go/src/github.com/snowdrop/generator
 
@@ -10,7 +13,7 @@ WORKDIR /go/src/github.com/snowdrop/generator/
 
 # generate executable that will be used by the entrypoint shell script to generate
 # the supervisor configuration
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o server main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags="-w -X main.GITCOMMIT=${GITCOMMIT} -X main.VERSION=${VERSION}" -o server main.go
 
 # Copy the application into a thin image
 FROM busybox
