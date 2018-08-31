@@ -7,6 +7,7 @@ type Project struct {
 	PackageName        string
 	Dependencies	   []string
 	OutDir             string
+	Template 		   string
 
 	SnowdropBomVersion string
 	SpringVersion      string
