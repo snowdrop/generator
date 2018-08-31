@@ -93,3 +93,5 @@ items:
       from:
         kind: DockerImage
         name: quay.io/snowdrop/spring-boot-generator:latest
+      importPolicy:
+        scheduled: true
