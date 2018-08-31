@@ -17,6 +17,7 @@ import (
 
 	"net/url"
 	"github.com/snowdrop/generator/pkg/common/logger"
+	"encoding/json"
 )
 
 var (
@@ -57,10 +58,18 @@ func init() {
 }
 
 func Run(version string, gitcommit string) {
-	log.Infof("Starting Spring Boot Generator Server on port %s, exposing endpoint %s - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
+	log.Infof("Starting Spring Boot Generator Server on port - Version : %s (%s)",port,"/template/{id}",version,gitcommit)
+	log.Infof("The following REST endpoints are available : ")
+	log.Infof("Generate project : %s","/template/{id}")
+	log.Infof("Config : %s","/config")
+
 
 	router := mux.NewRouter()
 	router.HandleFunc("/template/{id}", CreateZipFile).Methods("GET")
+	router.HandleFunc("/config", func(resp http.ResponseWriter, request *http.Request) {
+		r, _ := json.Marshal(scaffold.GetConfig())
+		fmt.Fprintf(resp,"%s",r)
+	}).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":" + port, router))
 }

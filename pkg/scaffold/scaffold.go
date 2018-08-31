@@ -28,6 +28,10 @@ var (
 	templates           = make(map[string]template.Template)
 )
 
+func GetConfig() *Config {
+	return &config
+}
+
 func NewDefaultScaffoldProject() *Project {
 	return &Project{
 		GroupId: "com.example",
