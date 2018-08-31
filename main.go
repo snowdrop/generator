@@ -1,6 +1,8 @@
 package main
 
-import "github.com/snowdrop/generator/pkg/server"
+import (
+	"github.com/snowdrop/generator/pkg/server"
+)
 
 var (
 	// VERSION is set during build
@@ -11,6 +13,7 @@ var (
 	// HEAD is default indicating that this was not set during build
 	GITCOMMIT = "HEAD"
 )
+
 
 func main() {
 	server.Run(VERSION, GITCOMMIT)
