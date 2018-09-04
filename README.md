@@ -14,8 +14,8 @@ where parameters could be :
   - `{version}` is the GAV's version
   - `{packageName}` is the name of the Java package
   - `{dependencies}` are the starters/modules that we propose : web, security, jax-rs, ...
-  - `{bomVersion}` is the Spring Boot BOM version (1.5.x, ....) 
-  - `{springbootVersion}` is the Snowdrop Bom version 
+  - `{bomVersion}` is the Snowdrop BOM version (1.5.x, ....) 
+  - `{springbootVersion}` is the Spring Boot version  (this will override the `bomVersion` parameter for Spring libraries)
 
 ## To run it locally
 
