@@ -8,7 +8,7 @@
 
   <properties>
     <spring-boot-bom.version>{{.SnowdropBomVersion}}</spring-boot-bom.version>
-    <spring-boot.version>{{.SpringVersion}}</spring-boot.version>
+    <spring-boot.version>{{.SpringBootVersion}}</spring-boot.version>
   </properties>
 
   <dependencyManagement>

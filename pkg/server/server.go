@@ -86,19 +86,19 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 
 	if getUrlVal(r,"template") != "" { p.Template = getUrlVal(r,"template")}
-	if getUrlVal(r,"groupId") != "" { p.GroupId = getUrlVal(r,"groupId")}
-	if getUrlVal(r,"artifactID") != "" {p.ArtifactId = getUrlVal(r,"artifactId")}
+	if getUrlVal(r,"groupid") != "" { p.GroupId = getUrlVal(r,"groupid")}
+	if getUrlVal(r,"artifactid") != "" {p.ArtifactId = getUrlVal(r,"artifactid")}
 	if getUrlVal(r,"version") != "" {p.Version = getUrlVal(r,"version")}
-	if getUrlVal(r,"packageName") != "" {p.PackageName = getUrlVal(r,"packageName")}
-	if len(getArrayVal(r,"dependencies",params)) > 0 {p.Dependencies = getArrayVal(r,"dependencies",params)}
-	if getUrlVal(r,"bomVersion") != "" {p.SnowdropBomVersion = getUrlVal(r,"bomVersion")}
-	if getUrlVal(r,"springbootVersion") != "" {p.SpringVersion = getUrlVal(r,"springbootVersion")}
-	if getUrlVal(r,"outDir") != "" {p.OutDir = getUrlVal(r,"outDir")}
+	if getUrlVal(r,"packagename") != "" {p.PackageName = getUrlVal(r,"packagename")}
+	if len(getArrayVal(r,"module",params)) > 0 {p.Dependencies = getArrayVal(r,"module",params)}
+	if getUrlVal(r,"snowdropbom") != "" {p.SnowdropBomVersion = getUrlVal(r,"snowdropbom")}
+	if getUrlVal(r,"springbootversion") != "" {p.SpringBootVersion = getUrlVal(r,"springbootversion")}
+	if getUrlVal(r,"outdir") != "" {p.OutDir = getUrlVal(r,"outdir")}
 
 	// As dependencies and template selection can't be used together, we force the template to be equal to "simple"
 	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
 	// which are incompatible or not fully tested with the template proposed
-	if len(getArrayVal(r,"dependencies",params)) > 0 && p.Template != "simple" {
+	if len(getArrayVal(r,"module",params)) > 0 && p.Template != "simple" {
 		p.Template = "simple"
 	}
 

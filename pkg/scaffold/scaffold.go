@@ -38,7 +38,7 @@ func NewDefaultScaffoldProject() *Project {
 		ArtifactId: "demo",
 		Version: "0.0.1-SNAPSHOT",
 		SnowdropBomVersion: "1.5.15.Final",
-		SpringVersion: "1.5.15.RELEASE",
+		SpringBootVersion: "1.5.15.RELEASE",
 		Template: "simple",
 	}
 }
