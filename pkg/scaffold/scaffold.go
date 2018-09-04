@@ -43,7 +43,7 @@ func NewDefaultScaffoldProject() *Project {
 	}
 }
 
-func ParseStartersConfigFile(pathConfigMap string) {
+func ParseGeneratorConfigFile(pathConfigMap string) {
 
 	startersPath := strings.Join([]string{pathConfigMap, configYamlName}, "/")
 	log.Infof("Parsing Starters's Config at %s", startersPath)
@@ -125,7 +125,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 			// Enrich project with starters dependencies if they exist
 			if strings.Contains(t.Name(), "pom.xml") {
 				if project.Dependencies != nil {
-					project = convertDependencyToModule(project.Dependencies, config.Module, project)
+					project = convertDependencyToModule(project.Dependencies, config.Modules, project)
 				}
 			}
 
@@ -180,7 +180,7 @@ func convertDependencyToModule(deps []string, modules []Module, p Project) Proje
 			if module.Name == dep {
 				log.Infof("Match found for dep %s and starters %+v ", dep, module)
 				p.Modules = append(p.Modules, module)
-				for _, starter := range module.Starters {
+				for _, starter := range module.Dependencies {
 					p.Starters = append(p.Starters,starter)
 				}
 			}
@@ -189,7 +189,7 @@ func convertDependencyToModule(deps []string, modules []Module, p Project) Proje
 	return p
 }
 
-func RemoveDuplicates(starters *[]Starter) {
+func RemoveDuplicates(starters *[]Dependency) {
 	found := make(map[string]bool)
 	j := 0
 	for i, x := range *starters {

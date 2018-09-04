@@ -1,18 +1,21 @@
-template:
+templates:
   - crud
   - rest
   - simple
-bom:
+boms:
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
   - community : 1.5.14.RELEASE
     snowdrop: 1.5.14.Final
   - community : 1.5.13.RELEASE
     snowdrop: 1.5.13.Final
-module:
+modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"
-    starters:
+    guide_ref : ""
+    tags:
+      - core
+    dependencies:
       - artifactid: spring-boot-starter
         groupid: org.springframework.boot
       - artifactid: spring-boot-starter-test
@@ -20,7 +23,12 @@ module:
         scope: test
   - name: web
     description: "Web"
-    starters:
+    guide_ref : ""
+    tags:
+      - web
+      - web-mvc
+      - RESTfull
+    dependencies:
       - artifactid: spring-boot-starter-web
         groupid: org.springframework.boot
       - artifactid: spring-boot-starter-test
@@ -28,7 +36,11 @@ module:
         scope: test
   - name: websocket
     description: "Websocket full-duplex communication and streaming of messages"
-    starters:
+    guide_ref : ""
+    tags:
+      - websocket
+      - dual communication
+    dependencies:
       - artifactid: spring-boot-starter-websocket
         groupid: org.springframework.boot
       - artifactid: spring-boot-starter-test
@@ -36,7 +48,11 @@ module:
         scope: test
   - name: jaxrs
     description: "Apache CXF Starter implementing JAX-RS specification"
-    starters:
+    guide_ref : ""
+    tags:
+      - jax-rs
+      - RESTFull
+    dependencies:
       - artifactid: cxf-spring-boot-starter-jaxrs
         groupid: org.apache.cxf
       - artifactid: spring-boot-starter-test
@@ -44,7 +60,11 @@ module:
         scope: test
   - name: hibernate
     description: "JPA & ORM with Hibernate"
-    starters:
+    guide_ref : ""
+    tags:
+      - orm
+      - hibernate
+    dependencies:
       - artifactid: spring-boot-starter-data-jpa
         groupid: org.springframework.boot
       - artifactid: spring-boot-starter-jdbc
@@ -54,7 +74,12 @@ module:
         scope: test
   - name: monitoring
     description: "Monitor and manage your application using Jolokia, Prometheus, ..."
-    starters:
+    guide_ref : ""
+    tags:
+      - monitoring
+      - jolokia
+      - prometheus
+    dependencies:
       - artifactid: spring-boot-starter-actuator
         groupid: org.springframework.boot
       - artifactid: spring-boot-starter-test

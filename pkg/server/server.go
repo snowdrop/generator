@@ -49,7 +49,7 @@ func init() {
 	// - Templates available : crud, rest, sumple, ...
 	// - Different Snowdrop/Community BOMs
 	// - Modules and their dependencies associated / the starters
-	scaffold.ParseStartersConfigFile(pathConfigMap)
+	scaffold.ParseGeneratorConfigFile(pathConfigMap)
 
 	// Create the Go Templates from the Spring Boot template directory (crud, web, simple, ....)
 	scaffold.CollectVfsTemplates()
