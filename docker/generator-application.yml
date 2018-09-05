@@ -30,6 +30,8 @@ items:
             value: '8080'
           - name: CONFIGMAP_PATH
             value: '/etc/config'
+          - name: LOG_LEVEL
+            value: 'info'
           image: quay.io/snowdrop/spring-boot-generator:latest
           imagePullPolicy: Always
           name: spring-boot-generator
