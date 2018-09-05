@@ -86,3 +86,18 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
+  - name: integration
+    description: "Apache Camel Routing and Mediation framework"
+    guide_ref : ""
+    tags:
+      - integration
+      - camel
+      - routing
+      - mediation
+    dependencies:
+      - artifactid: camel-spring-boot-starter
+        groupid: org.apache.camel
+        version: 2.21.1
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
