@@ -97,7 +97,7 @@ modules:
     dependencies:
       - artifactid: camel-spring-boot-starter
         groupid: org.apache.camel
-        version: 2.21.1
+        version: '2.21.1'
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
