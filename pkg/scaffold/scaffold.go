@@ -45,12 +45,12 @@ func NewDefaultScaffoldProject() *Project {
 
 func ParseGeneratorConfigFile(pathConfigMap string) {
 
-	startersPath := strings.Join([]string{pathConfigMap, configYamlName}, "/")
-	log.Infof("Parsing Starters's Config at %s", startersPath)
+	configPath := strings.Join([]string{pathConfigMap, configYamlName}, "/")
+	log.Infof("Parsing Generator's Config at %s", configPath)
 
 	// Read file and parse it to create a Config's type
-	if _, err := os.Stat(startersPath); err == nil {
-		source, err := ioutil.ReadFile(startersPath)
+	if _, err := os.Stat(configPath); err == nil {
+		source, err := ioutil.ReadFile(configPath)
 		if err != nil {
 			log.Fatal(err.Error())
 		}
@@ -122,19 +122,19 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 			log.Infof("Template processed : %s", t.Name())
 			var b bytes.Buffer
 
-			// Enrich project with starters dependencies if they exist
+			// Enrich project with dependencies if they exist
 			if strings.Contains(t.Name(), "pom.xml") {
-				if project.Dependencies != nil {
-					project = convertDependencyToModule(project.Dependencies, config.Modules, project)
+				if project.Modules != nil {
+					addDependenciesToModule(config.Modules, &project)
 				}
 			}
 
-			// Remove Starter duplicates
-			RemoveDuplicates(&project.Starters)
+			// Remove duplicate's dependencies from modules
+			project.Dependencies = RemoveDuplicates(project.Modules)
 
-			if log.GetLevel() == log.DebugLevel {
-				for _, starter := range project.Starters {
-				 		log.Info("No duplicate Starter : ", starter.ArtifactId)
+			if log.GetLevel() == log.InfoLevel {
+				for _, dep := range project.Dependencies {
+				 		log.Info("Dependency : %s-%s-$s", dep.GroupId, dep.GroupId, dep.Version)
 				}
 			}
 
@@ -174,32 +174,31 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 	log.Infof("Project enriched %+v ", project)
 }
 
-func convertDependencyToModule(deps []string, modules []Module, p Project) Project {
-	for _, dep := range deps {
-		for _, module := range modules {
-			if module.Name == dep {
-				log.Infof("Match found for dep %s and starters %+v ", dep, module)
-				p.Modules = append(p.Modules, module)
-				for _, starter := range module.Dependencies {
-					p.Starters = append(p.Starters,starter)
-				}
+func addDependenciesToModule(configModules []Module, project *Project) {
+	for _, configModule := range configModules {
+		for i, pModule := range project.Modules {
+			if configModule.Name == pModule.Name {
+				log.Infof("Match found for project's module %s and modules %+v ", pModule.Name, configModule)
+				project.Modules[i].Dependencies = configModule.Dependencies
 			}
 		}
 	}
-	return p
 }
 
-func RemoveDuplicates(starters *[]Dependency) {
-	found := make(map[string]bool)
-	j := 0
-	for i, x := range *starters {
-		if !found[x.ArtifactId] {
-			found[x.ArtifactId] = true
-			(*starters)[j] = (*starters)[i]
-			j++
+func RemoveDuplicates(mods []Module) []Dependency{
+	keys := make(map[string]bool)
+	list := []Dependency{}
+	for _, mod := range mods {
+		for _, dep := range mod.Dependencies {
+			gav := strings.Join([]string{dep.GroupId,dep.ArtifactId,dep.Version},"-")
+			if _, value := keys[gav]; !value {
+				keys[gav] = true
+				list = append(list, dep)
+			}
 		}
 	}
-	*starters = (*starters)[:j]
+	return list
+
 }
 
 func convertPackageToPath(p string) string {
