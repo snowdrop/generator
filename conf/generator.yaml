@@ -2,7 +2,7 @@ templates:
   - crud
   - rest
   - simple
-bomVersions:
+bomversions:
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
   - community : 1.5.14.RELEASE
