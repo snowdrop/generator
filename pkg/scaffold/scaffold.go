@@ -38,6 +38,7 @@ func NewDefaultProject() *Project {
 	return &Project{
 		GroupId: "com.example",
 		ArtifactId: "demo",
+		PackageName: "com.example.demo",
 		Version: "0.0.1-SNAPSHOT",
 		SnowdropBomVersion: snowdropBomVersion,
 		SpringBootVersion: springBootBomVersion,
