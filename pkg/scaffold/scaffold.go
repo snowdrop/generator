@@ -32,15 +32,27 @@ func GetConfig() *Config {
 	return &config
 }
 
-func NewDefaultScaffoldProject() *Project {
+//Create a new Default Project using default values
+func NewDefaultProject() *Project {
+	springBootBomVersion, snowdropBomVersion := GetDefaultBOM()
 	return &Project{
 		GroupId: "com.example",
 		ArtifactId: "demo",
 		Version: "0.0.1-SNAPSHOT",
-		SnowdropBomVersion: "1.5.15.Final",
-		SpringBootVersion: "1.5.15.RELEASE",
+		SnowdropBomVersion: snowdropBomVersion,
+		SpringBootVersion: springBootBomVersion,
 		Template: "simple",
 	}
+}
+
+func GetDefaultBOM() (string, string) {
+	cfg := GetConfig()
+	for _, bom := range cfg.Boms {
+		if bom.Default {
+			return bom.Community, bom.Snowdrop
+		}
+	}
+	return "", ""
 }
 
 func ParseGeneratorConfigFile(pathConfigMap string) {

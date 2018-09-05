@@ -26,7 +26,7 @@ var (
 	pathConfigMap    = ""
 	tmpDirName       = "_temp"
 	letterRunes      = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	p				 = *scaffold.NewDefaultScaffoldProject()
+	p				 = *scaffold.NewDefaultProject()
 )
 
 func init() {
