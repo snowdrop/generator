@@ -21,21 +21,25 @@ const (
 )
 
 var (
-	templateFiles []string
-	config        Config
-
+	templateFiles         []string
+	config                *Config
+	p    				  *Project
 	assetsJavaTemplates = tmpl.Assets
 	templates           = make(map[string]template.Template)
 )
 
 func GetConfig() *Config {
-	return &config
+	return config
+}
+
+func GetDefaultProject() *Project {
+	return p
 }
 
 //Create a new Default Project using default values
-func NewDefaultProject() *Project {
-	springBootBomVersion, snowdropBomVersion := GetDefaultBOM()
-	return &Project{
+func CreateDefaultProject() {
+	springBootBomVersion, snowdropBomVersion := getDefaultBOM()
+	p = &Project{
 		GroupId: "com.example",
 		ArtifactId: "demo",
 		PackageName: "com.example.demo",
@@ -44,9 +48,10 @@ func NewDefaultProject() *Project {
 		SpringBootVersion: springBootBomVersion,
 		Template: "simple",
 	}
+	log.Debug(">> Default Project created : ",p)
 }
 
-func GetDefaultBOM() (string, string) {
+func getDefaultBOM() (string, string) {
 	cfg := GetConfig()
 	for _, bom := range cfg.Boms {
 		if bom.Default {
@@ -126,7 +131,7 @@ func CollectVfsTemplates() {
 	}
 }
 
-func ParseTemplateSelected(templateSelected string, dir string, outDir string, project Project) {
+func ParseTemplateSelected(templateSelected string, dir string, outDir string, project *Project) {
 
 	// Pickup from the Map of the Templates, the files corresponding to the type selected by the user
 	for key, t := range templates {
@@ -138,7 +143,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 			// Enrich project with dependencies if they exist
 			if strings.Contains(t.Name(), "pom.xml") {
 				if project.Modules != nil {
-					addDependenciesToModule(config.Modules, &project)
+					addDependenciesToModule(config.Modules, project)
 				}
 			}
 
@@ -147,7 +152,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 
 			if log.GetLevel() == log.InfoLevel {
 				for _, dep := range project.Dependencies {
-				 		log.Info("Dependency : %s-%s-$s", dep.GroupId, dep.GroupId, dep.Version)
+				 		log.Infof("Dependency : %s-%s-$s", dep.GroupId, dep.GroupId, dep.Version)
 				}
 			}
 

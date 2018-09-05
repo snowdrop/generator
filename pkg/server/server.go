@@ -26,7 +26,6 @@ var (
 	pathConfigMap    = ""
 	tmpDirName       = "_temp"
 	letterRunes      = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	p				 = *scaffold.NewDefaultProject()
 )
 
 func init() {
@@ -50,6 +49,7 @@ func init() {
 	// - Different Snowdrop/Community BOMs
 	// - Modules and their dependencies associated / the starters
 	scaffold.ParseGeneratorConfigFile(pathConfigMap)
+	scaffold.CreateDefaultProject()
 
 	// Create the Go Templates from the Spring Boot template directory (crud, web, simple, ....)
 	scaffold.CollectVfsTemplates()
@@ -97,6 +97,7 @@ func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []
 //Process the HTTP GET Raw Request and populate a zip file as HTTP Response
 func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	params, _ := url.ParseQuery(r.URL.RawQuery)
+	p := scaffold.GetDefaultProject()
 
 	if getUrlVal(r,"template") != "" { p.Template = getUrlVal(r,"template")}
 	if getUrlVal(r,"groupid") != "" { p.GroupId = getUrlVal(r,"groupid")}
