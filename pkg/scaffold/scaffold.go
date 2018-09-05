@@ -51,14 +51,13 @@ func CreateDefaultProject() {
 	log.Debug(">> Default Project created : ", p)
 }
 
-func getDefaultBOM() (string, string) {
-	cfg := GetConfig()
-	for _, bom := range cfg.Boms {
-		if bom.Default {
-			return bom.Community, bom.Snowdrop
+func GetCorrespondingSnowDropBom(version string) string {
+	for _, bom := range config.Boms {
+		if bom.Community == version {
+			return bom.Snowdrop
 		}
 	}
-	return "", ""
+	return ""
 }
 
 func ParseGeneratorConfigFile(pathConfigMap string) {
@@ -192,17 +191,6 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 	log.Infof("Project enriched %+v ", project)
 }
 
-func addDependenciesToModule(configModules []Module, project *Project) {
-	for _, configModule := range configModules {
-		for i, pModule := range project.Modules {
-			if configModule.Name == pModule.Name {
-				log.Infof("Match found for project's module %s and modules %+v ", pModule.Name, configModule)
-				project.Modules[i].Dependencies = configModule.Dependencies
-			}
-		}
-	}
-}
-
 func RemoveDuplicates(mods []Module) []Dependency {
 	keys := make(map[string]bool)
 	list := []Dependency{}
@@ -217,6 +205,27 @@ func RemoveDuplicates(mods []Module) []Dependency {
 	}
 	return list
 
+}
+
+func getDefaultBOM() (string, string) {
+	cfg := GetConfig()
+	for _, bom := range cfg.Boms {
+		if bom.Default {
+			return bom.Community, bom.Snowdrop
+		}
+	}
+	return "", ""
+}
+
+func addDependenciesToModule(configModules []Module, project *Project) {
+	for _, configModule := range configModules {
+		for i, pModule := range project.Modules {
+			if configModule.Name == pModule.Name {
+				log.Infof("Match found for project's module %s and modules %+v ", pModule.Name, configModule)
+				project.Modules[i].Dependencies = configModule.Dependencies
+			}
+		}
+	}
 }
 
 func convertPackageToPath(p string) string {

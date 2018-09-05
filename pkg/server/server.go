@@ -139,6 +139,12 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 		p.OutDir = getUrlVal(r, "outdir")
 	}
 
+	// If the snowdropbom version is not defined BUT only the Spring Boot Version, then get the corresponding
+	// BOM version using the version of the Spring Boot selected from the Config Bom's Array
+	if getUrlVal(r, "snowdropbom") == "" && getUrlVal(r, "springbootversion") != "" {
+		p.SnowdropBomVersion = scaffold.GetCorrespondingSnowDropBom(p.SpringBootVersion)
+	}
+
 	// As dependencies and template selection can't be used together, we force the template to be equal to "simple"
 	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
 	// which are incompatible or not fully tested with the template proposed
