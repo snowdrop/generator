@@ -36,20 +36,19 @@ Next, in a separate terminal window, execute a `curl` or `httpie` request
 ```bash
 curl http://localhost:8000/app \
   -o demo.zip \
-  -d bomVersion=1.5.15.Final \
-  -d groupId=com.example \
-  -d artifactId=my-spring-boot \
-  -d version=1.0  \
-  -d packageName=com.example.demo \
-  -d springbootVersion=1.5.15.RELEASE
+  -d springbootversion=1.5.15.Final \
+  -d groupid=com.example \
+  -d artifactid=my-spring-boot \
+  -d version=0.0.1-SNAPSHOT  \
+  -d packagename=com.example.demo
   
 http :8000/app \
-  bomVersion==1.5.15.Final \
-  groupId==com.example \
-  artifactId==my-spring-boot \
-  version==1.0  \
-  packageName==com.example.demo \
-  springbootVersion==1.5.15.RELEASE > demo.zip  
+   groupid==com.example \
+   artifactid==demo \
+   version==0.0.1-SNAPSHOT \
+   packagename==com.example.demo \
+   springbootversion==1.5.13.RELEASE \
+   template==simple  > demo.zip  
 ``` 
 
 Unzip the file
