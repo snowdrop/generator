@@ -7,7 +7,7 @@
   <description>Spring Boot - JAX-RS REST Demo</description>
 
   <properties>
-    <spring-boot-bom.version>{{.SnowdropBomVersion}}</spring-boot-bom.version>
+    <snowdrop-bom.version>{{.SnowdropBomVersion}}</snowdrop-bom.version>
     <spring-boot.version>{{.SpringBootVersion}}</spring-boot.version>
   </properties>
 
@@ -16,7 +16,7 @@
       <dependency>
         <groupId>me.snowdrop</groupId>
         <artifactId>spring-boot-bom</artifactId>
-        <version>${spring-boot-bom.version}</version>
+        <version>${snowdrop-bom.version}</version>
         <type>pom</type>
         <scope>import</scope>
        </dependency>
