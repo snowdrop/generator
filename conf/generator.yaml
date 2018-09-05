@@ -5,6 +5,7 @@ templates:
 bomversions:
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
+    default: true
   - community : 1.5.14.RELEASE
     snowdrop: 1.5.14.Final
   - community : 1.5.13.RELEASE

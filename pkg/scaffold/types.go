@@ -26,6 +26,7 @@ type Config struct {
 type Bom struct {
 	Community string `yaml:"community" json:"community"`
 	Snowdrop  string `yaml:"snowdrop"  json:"snowdrop"`
+	Default   bool   `yaml:"default"  json:"default"`
 }
 
 type Module struct {
