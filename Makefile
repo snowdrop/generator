@@ -46,8 +46,13 @@ $(VFSGENDEV): $(VFSGENDEV_SRC)
 $(VFSGENDEV_SRC):
 	go get -u github.com/shurcooL/vfsgen
 
-gofmt:
-	./scripts/check-gofmt.sh
+format:
+	@echo ">> checking code style"
+	@fmtRes=$$($(GOFMT) -d $$(find . -path ./vendor -prune -o -name '*.go' -print)); \
+	if [ -n "$${fmtRes}" ]; then \
+		echo "gofmt checking failed!"; echo "$${fmtRes}"; echo; \
+		exit 1; \
+	fi
 
 version:
 	@echo $(VERSION)
