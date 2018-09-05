@@ -1,7 +1,5 @@
 [![CircleCI](https://circleci.com/gh/snowdrop/generator/tree/master.svg?style=shield)](https://circleci.com/gh/snowdrop/generator/tree/master)
 
-https://appdev.openshift.io/docs/spring-boot-runtime.html#mission-http-api-spring-boot
-
 # HTTP Server generating Spring Boot Zip file
 
 This project will generate a zip file in response to a HTTP GET request using the parameters of the url to customize a project using a template
