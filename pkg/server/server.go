@@ -94,11 +94,11 @@ func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []
 func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
 	// Set CORS Headers
 	if origin := r.Header.Get("Origin"); origin != "" {
-		r.Response.Header.Set("Access-Control-Allow-Origin", origin)
-		r.Response.Header.Set("Access-Control-Allow-Credentials", "true")
-		r.Response.Header.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		r.Response.Header.Set("Access-Control-Max-Age", "3600")
-		r.Response.Header.Set("Access-Control-Allow-Headers",
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Max-Age", "3600")
+		w.Header().Set("Access-Control-Allow-Headers",
 			"Accept, Content-Type, Content-Length, Accept-Encoding, X-Requested-With, remember-me, X-CSRF-Token, Authorization")
 	}
 	jsonStr, _ := json.Marshal(scaffold.GetConfig())
