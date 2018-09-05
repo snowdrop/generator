@@ -101,3 +101,20 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
+  - name: cloud-kubernetes
+    description: "Cloud Kubernetes modules to discover client, mount config map, secret"
+    guide_ref : ""
+    tags:
+      - cloud
+      - kubernetes
+      - openshift
+      - configmap
+      - secret
+    dependencies:
+      - artifactid: spring-cloud-starter-kubernetes
+        groupid: org.springframework.cloud
+      - artifactid: spring-cloud-starter-kubernetes-config
+        groupid: org.springframework.cloud
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
