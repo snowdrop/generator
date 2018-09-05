@@ -81,6 +81,19 @@ func getArrayVal(r *http.Request, k string, params map[string][]string) []string
 	return params[k]
 }
 
+func convertArrayToStruct(modules []string) []scaffold.Module {
+	mod := make([]scaffold.Module,0)
+	for _, e := range modules {
+		mod = append(mod, scaffold.Module{Name: e})
+	}
+	return mod
+}
+
+
+func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []scaffold.Module {
+	return convertArrayToStruct(params[k])
+}
+
 //Process the HTTP GET Raw Request and populate a zip file as HTTP Response
 func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	params, _ := url.ParseQuery(r.URL.RawQuery)
@@ -90,7 +103,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	if getUrlVal(r,"artifactid") != "" {p.ArtifactId = getUrlVal(r,"artifactid")}
 	if getUrlVal(r,"version") != "" {p.Version = getUrlVal(r,"version")}
 	if getUrlVal(r,"packagename") != "" {p.PackageName = getUrlVal(r,"packagename")}
-	if len(getArrayVal(r,"module",params)) > 0 {p.Dependencies = getArrayVal(r,"module",params)}
+	if len(getArrayModuleVal(r,"module",params)) > 0 {p.Modules = getArrayModuleVal(r,"module",params)}
 	if getUrlVal(r,"snowdropbom") != "" {p.SnowdropBomVersion = getUrlVal(r,"snowdropbom")}
 	if getUrlVal(r,"springbootversion") != "" {p.SpringBootVersion = getUrlVal(r,"springbootversion")}
 	if getUrlVal(r,"outdir") != "" {p.OutDir = getUrlVal(r,"outdir")}
