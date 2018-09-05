@@ -65,10 +65,7 @@ func Run(version string, gitcommit string) {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/app", CreateZipFile).Methods("GET")
-	router.HandleFunc("/config", func(resp http.ResponseWriter, request *http.Request) {
-		r, _ := json.Marshal(scaffold.GetConfig())
-		fmt.Fprintf(resp, "%s", r)
-	}).Methods("GET")
+	router.HandleFunc("/config", PopulateJSONConfig).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
@@ -93,8 +90,24 @@ func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []
 	return convertArrayToStruct(params[k])
 }
 
+//Process the HTTP Get request to return as JSON message the Generator config
+func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
+	// Set CORS Headers
+	if origin := r.Header.Get("Origin"); origin != "" {
+		r.Response.Header.Set("Access-Control-Allow-Origin", origin)
+		r.Response.Header.Set("Access-Control-Allow-Credentials", "true")
+		r.Response.Header.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		r.Response.Header.Set("Access-Control-Max-Age", "3600")
+		r.Response.Header.Set("Access-Control-Allow-Headers",
+			"Accept, Content-Type, Content-Length, Accept-Encoding, X-Requested-With, remember-me, X-CSRF-Token, Authorization")
+	}
+	jsonStr, _ := json.Marshal(scaffold.GetConfig())
+	fmt.Fprintf(r, "%s", jsonStr)
+}
+
 //Process the HTTP GET Raw Request and populate a zip file as HTTP Response
 func CreateZipFile(w http.ResponseWriter, r *http.Request) {
+
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 	p := scaffold.GetDefaultProject()
 
