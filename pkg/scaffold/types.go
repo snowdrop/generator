@@ -40,6 +40,6 @@ type Module struct {
 type Dependency struct {
 	GroupId    string `yaml:"groupid"           json:"groupid"`
 	ArtifactId string `yaml:"artifactid"        json:"artifactid"`
-	Scope      string `yaml:"scope"             json:"scope"`
+	Scope      string `yaml:"scope,omitempty"   json:"scope,omitempty"`
 	Version    string `yaml:"version,omitempty" json:"version,omitempty"`
 }
