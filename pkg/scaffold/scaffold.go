@@ -152,7 +152,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 
 			if log.GetLevel() == log.InfoLevel {
 				for _, dep := range project.Dependencies {
-					log.Infof("Dependency : %s-%s-$s", dep.GroupId, dep.GroupId, dep.Version)
+					log.Infof("Dependency : %s-%s-%s", dep.GroupId, dep.GroupId, dep.Version)
 				}
 			}
 
