@@ -5,14 +5,14 @@ type Project struct {
 	ArtifactId         string       `yaml:"artifactid"        json:"artifactid"`
 	Version            string       `yaml:"version"           json:"version"`
 	PackageName        string       `yaml:"packagename"       json:"packagename"`
-	Dependencies	   []string     `yaml:"dependencies"      json:"dependencies"`
 	OutDir             string       `yaml:"outdir"            json:"outdir"`
 	Template 		   string       `yaml:"template"          json:"template"`
 
 	SnowdropBomVersion string       `yaml:"snowdropbom"       json:"snowdropbom"`
 	SpringBootVersion  string       `yaml:"springbootversion" json:"springbootversion"`
+
 	Modules            []Module     `yaml:"modules"           json:"modules"`
-	Starters	       []Dependency `yaml:"dependency"        json:"dependency"`
+	Dependencies	   []Dependency
 
 	UrlService  	   string    `yaml:"urlservice"           json:"urlservice"`
 }
