@@ -102,7 +102,7 @@ func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
 			"Accept, Content-Type, Content-Length, Accept-Encoding, X-Requested-With, remember-me, X-CSRF-Token, Authorization")
 	}
 	jsonStr, _ := json.Marshal(scaffold.GetConfig())
-	fmt.Fprintf(r, "%s", jsonStr)
+	fmt.Fprintf(w, "%s", jsonStr)
 }
 
 //Process the HTTP GET Raw Request and populate a zip file as HTTP Response
