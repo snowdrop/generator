@@ -22,8 +22,8 @@
        </dependency>
     </dependencies>
   </dependencyManagement>
-  {{ if .Starters }}
-  <dependencies>{{ range .Starters }}
+  {{ if .Dependencies }}
+  <dependencies>{{ range .Dependencies }}
     <dependency>
       <groupId>{{.GroupId}}</groupId>
       <artifactId>{{.ArtifactId}}</artifactId>{{ if .Scope }}
