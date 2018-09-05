@@ -15,23 +15,23 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/snowdrop/generator/pkg/scaffold"
 
-	"net/url"
-	"github.com/snowdrop/generator/pkg/common/logger"
 	"encoding/json"
+	"github.com/snowdrop/generator/pkg/common/logger"
+	"net/url"
 )
 
 var (
-	currentDir, _    = os.Getwd()
-	port			 = "8000"
-	pathConfigMap    = ""
-	tmpDirName       = "_temp"
-	letterRunes      = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	currentDir, _ = os.Getwd()
+	port          = "8000"
+	pathConfigMap = ""
+	tmpDirName    = "_temp"
+	letterRunes   = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 )
 
 func init() {
 	// Enable Debug level mode if ENV LOG_LEVEL=debug is defined
 	logger.EnableLogLevelDebug()
-	log.Print("Log level : ",log.GetLevel())
+	log.Print("Log level : ", log.GetLevel())
 
 	// Check env vars
 	s := os.Getenv("SERVER_PORT")
@@ -58,19 +58,19 @@ func init() {
 }
 
 func Run(version string, gitcommit string) {
-	log.Infof("Starting Spring Boot Generator Server on port %s - Version %s (%s)",port,version,gitcommit)
+	log.Infof("Starting Spring Boot Generator Server on port %s - Version %s (%s)", port, version, gitcommit)
 	log.Infof("The following REST endpoints are available : ")
-	log.Infof("Generate zip : %s","/app")
-	log.Infof("Config : %s","/config")
+	log.Infof("Generate zip : %s", "/app")
+	log.Infof("Config : %s", "/config")
 
 	router := mux.NewRouter()
 	router.HandleFunc("/app", CreateZipFile).Methods("GET")
 	router.HandleFunc("/config", func(resp http.ResponseWriter, request *http.Request) {
 		r, _ := json.Marshal(scaffold.GetConfig())
-		fmt.Fprintf(resp,"%s",r)
+		fmt.Fprintf(resp, "%s", r)
 	}).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":" + port, router))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 func getUrlVal(r *http.Request, k string) string {
@@ -82,13 +82,12 @@ func getArrayVal(r *http.Request, k string, params map[string][]string) []string
 }
 
 func convertArrayToStruct(modules []string) []scaffold.Module {
-	mod := make([]scaffold.Module,0)
+	mod := make([]scaffold.Module, 0)
 	for _, e := range modules {
 		mod = append(mod, scaffold.Module{Name: e})
 	}
 	return mod
 }
-
 
 func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []scaffold.Module {
 	return convertArrayToStruct(params[k])
@@ -99,36 +98,54 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 	p := scaffold.GetDefaultProject()
 
-	if getUrlVal(r,"template") != "" { p.Template = getUrlVal(r,"template")}
-	if getUrlVal(r,"groupid") != "" { p.GroupId = getUrlVal(r,"groupid")}
-	if getUrlVal(r,"artifactid") != "" {p.ArtifactId = getUrlVal(r,"artifactid")}
-	if getUrlVal(r,"version") != "" {p.Version = getUrlVal(r,"version")}
-	if getUrlVal(r,"packagename") != "" {p.PackageName = getUrlVal(r,"packagename")}
-	if len(getArrayModuleVal(r,"module",params)) > 0 {p.Modules = getArrayModuleVal(r,"module",params)}
-	if getUrlVal(r,"snowdropbom") != "" {p.SnowdropBomVersion = getUrlVal(r,"snowdropbom")}
-	if getUrlVal(r,"springbootversion") != "" {p.SpringBootVersion = getUrlVal(r,"springbootversion")}
-	if getUrlVal(r,"outdir") != "" {p.OutDir = getUrlVal(r,"outdir")}
+	if getUrlVal(r, "template") != "" {
+		p.Template = getUrlVal(r, "template")
+	}
+	if getUrlVal(r, "groupid") != "" {
+		p.GroupId = getUrlVal(r, "groupid")
+	}
+	if getUrlVal(r, "artifactid") != "" {
+		p.ArtifactId = getUrlVal(r, "artifactid")
+	}
+	if getUrlVal(r, "version") != "" {
+		p.Version = getUrlVal(r, "version")
+	}
+	if getUrlVal(r, "packagename") != "" {
+		p.PackageName = getUrlVal(r, "packagename")
+	}
+	if len(getArrayModuleVal(r, "module", params)) > 0 {
+		p.Modules = getArrayModuleVal(r, "module", params)
+	}
+	if getUrlVal(r, "snowdropbom") != "" {
+		p.SnowdropBomVersion = getUrlVal(r, "snowdropbom")
+	}
+	if getUrlVal(r, "springbootversion") != "" {
+		p.SpringBootVersion = getUrlVal(r, "springbootversion")
+	}
+	if getUrlVal(r, "outdir") != "" {
+		p.OutDir = getUrlVal(r, "outdir")
+	}
 
 	// As dependencies and template selection can't be used together, we force the template to be equal to "simple"
 	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
 	// which are incompatible or not fully tested with the template proposed
-	if len(getArrayVal(r,"module",params)) > 0 && p.Template != "simple" {
+	if len(getArrayVal(r, "module", params)) > 0 && p.Template != "simple" {
 		p.Template = "simple"
 	}
 
-	log.Info("Project : ",p)
+	log.Info("Project : ", p)
 	log.Infof("Request received : %s", r.URL)
 
 	// Generate a random temp directory where populated files will be saved
-	tmpdir := strings.Join([]string{tmpDirName,randStringRunes(10)}, "/")
-	log.Infof("Temp dir %s",tmpdir)
+	tmpdir := strings.Join([]string{tmpDirName, randStringRunes(10)}, "/")
+	log.Infof("Temp dir %s", tmpdir)
 
 	// Parse the java project's template selected and enrich the scaffold.Project with the dependencies (if they are)
-	scaffold.ParseTemplateSelected(p.Template,currentDir,tmpdir,p)
+	scaffold.ParseTemplateSelected(p.Template, currentDir, tmpdir, p)
 	log.Info("Project generated")
 
-	zipDir := strings.Join([]string{tmpdir,p.Template,"/"},"/")
-	handleZip(w,zipDir)
+	zipDir := strings.Join([]string{tmpdir, p.Template, "/"}, "/")
+	handleZip(w, zipDir)
 	log.Info("Zip populated")
 
 	// Remove temp dir where project has been generated
@@ -136,14 +153,14 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func removeTempDir(tmpdir string) {
-	err := os.RemoveAll(strings.Join([]string{currentDir,tmpdir},"/"))
+	err := os.RemoveAll(strings.Join([]string{currentDir, tmpdir}, "/"))
 	if err != nil {
 		log.Error(err.Error())
 	}
 }
 
 // Generate Zip file to be returned as HTTP Response
-func handleZip(w http.ResponseWriter,tmpdir string) {
+func handleZip(w http.ResponseWriter, tmpdir string) {
 	zipFilename := "demo.zip"
 	w.Header().Set("Content-Type", "application/zip")
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", zipFilename))
@@ -156,10 +173,10 @@ func handleZip(w http.ResponseWriter,tmpdir string) {
 
 // Get Files generated from templates under _temp directory and
 // them recursively to the file to be zipped
-func zipFiles(w http.ResponseWriter,tmpdir string) error {
-	fullPathZipDir := strings.Join([]string{currentDir,tmpdir},"/")
-	log.Info("Zip file path : ",fullPathZipDir)
-	err := recursiveZip(w,fullPathZipDir)
+func zipFiles(w http.ResponseWriter, tmpdir string) error {
+	fullPathZipDir := strings.Join([]string{currentDir, tmpdir}, "/")
+	log.Info("Zip file path : ", fullPathZipDir)
+	err := recursiveZip(w, fullPathZipDir)
 	if err != nil {
 		log.Error(err)
 		return err
@@ -179,8 +196,8 @@ func recursiveZip(w http.ResponseWriter, destinationPath string) error {
 			return err
 		}
 		relPath := strings.TrimPrefix(filePath, filepath.Dir(destinationPath))
-		relPath = strings.TrimPrefix(relPath,"/")
-		log.Debugf("relPath calculated : ",relPath)
+		relPath = strings.TrimPrefix(relPath, "/")
+		log.Debugf("relPath calculated : ", relPath)
 
 		zipFile, err := zipWriter.Create(relPath)
 		if err != nil {
@@ -213,4 +230,3 @@ func randStringRunes(n int) string {
 	}
 	return string(b)
 }
-

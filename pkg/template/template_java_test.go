@@ -1,21 +1,21 @@
 package template
 
 import (
-	"os"
 	"fmt"
+	"os"
 
 	"github.com/shurcooL/httpfs/vfsutil"
-	"testing"
 	"net/http"
+	"testing"
 )
 
 var (
-	templateFiles   []string
-	project         = "simple"
+	templateFiles []string
+	project       = "simple"
 )
 
 func TestVfsSimpleJavaProject(t *testing.T) {
-	tExpectedFiles := []string {
+	tExpectedFiles := []string{
 		"simple/pom.xml",
 		"simple/src/main/java/dummy/DemoApplication.java",
 		"simple/src/main/resources/application.properties",
@@ -44,7 +44,7 @@ func walkTree() []string {
 		}
 
 		fmt.Println(path)
-		templateFiles = append(templateFiles,path)
+		templateFiles = append(templateFiles, path)
 		return nil
 	})
 	return templateFiles

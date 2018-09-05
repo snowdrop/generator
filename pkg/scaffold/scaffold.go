@@ -21,9 +21,9 @@ const (
 )
 
 var (
-	templateFiles         []string
-	config                *Config
-	p    				  *Project
+	templateFiles       []string
+	config              *Config
+	p                   *Project
 	assetsJavaTemplates = tmpl.Assets
 	templates           = make(map[string]template.Template)
 )
@@ -40,15 +40,15 @@ func GetDefaultProject() *Project {
 func CreateDefaultProject() {
 	springBootBomVersion, snowdropBomVersion := getDefaultBOM()
 	p = &Project{
-		GroupId: "com.example",
-		ArtifactId: "demo",
-		PackageName: "com.example.demo",
-		Version: "0.0.1-SNAPSHOT",
+		GroupId:            "com.example",
+		ArtifactId:         "demo",
+		PackageName:        "com.example.demo",
+		Version:            "0.0.1-SNAPSHOT",
 		SnowdropBomVersion: snowdropBomVersion,
-		SpringBootVersion: springBootBomVersion,
-		Template: "simple",
+		SpringBootVersion:  springBootBomVersion,
+		Template:           "simple",
 	}
-	log.Debug(">> Default Project created : ",p)
+	log.Debug(">> Default Project created : ", p)
 }
 
 func getDefaultBOM() (string, string) {
@@ -135,7 +135,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 
 	// Pickup from the Map of the Templates, the files corresponding to the type selected by the user
 	for key, t := range templates {
-		if strings.HasPrefix(key,"/" + templateSelected) {
+		if strings.HasPrefix(key, "/"+templateSelected) {
 
 			log.Infof("Template processed : %s", t.Name())
 			var b bytes.Buffer
@@ -152,7 +152,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 
 			if log.GetLevel() == log.InfoLevel {
 				for _, dep := range project.Dependencies {
-				 		log.Infof("Dependency : %s-%s-$s", dep.GroupId, dep.GroupId, dep.Version)
+					log.Infof("Dependency : %s-%s-$s", dep.GroupId, dep.GroupId, dep.Version)
 				}
 			}
 
@@ -203,12 +203,12 @@ func addDependenciesToModule(configModules []Module, project *Project) {
 	}
 }
 
-func RemoveDuplicates(mods []Module) []Dependency{
+func RemoveDuplicates(mods []Module) []Dependency {
 	keys := make(map[string]bool)
 	list := []Dependency{}
 	for _, mod := range mods {
 		for _, dep := range mod.Dependencies {
-			gav := strings.Join([]string{dep.GroupId,dep.ArtifactId,dep.Version},"-")
+			gav := strings.Join([]string{dep.GroupId, dep.ArtifactId, dep.Version}, "-")
 			if _, value := keys[gav]; !value {
 				keys[gav] = true
 				list = append(list, dep)

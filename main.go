@@ -14,7 +14,6 @@ var (
 	GITCOMMIT = "HEAD"
 )
 
-
 func main() {
 	server.Run(VERSION, GITCOMMIT)
 }
