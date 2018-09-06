@@ -91,7 +91,9 @@ http :8000/app \
    artifactid==demo \
    version==0.0.1-SNAPSHOT \
    packagename==com.example.demo \
-   springbootversion==1.5.13.RELEASE \
+   springbootversion==1.5.15.RELEASE \
+   module==web \
+   module==keycloak \
    template==simple  > demo.zip  
 ``` 
 
