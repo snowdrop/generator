@@ -59,12 +59,16 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-  - name: hibernate
-    description: "JPA & ORM with Hibernate"
+  - name: jpa
+    description: "Java Persistence - JPA, JDBC"
     guide_ref : ""
     tags:
       - orm
       - hibernate
+      - database
+      - persistence
+      - jdbc
+      - jpa
     dependencies:
       - artifactid: spring-boot-starter-data-jpa
         groupid: org.springframework.boot
