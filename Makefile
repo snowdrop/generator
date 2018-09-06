@@ -11,10 +11,10 @@ PREFIX      ?= $(shell pwd)
 all: clean build
 
 clean:
-	@echo "> Remove build dir"
-	@rm -rf ./build
+	@echo "> Remove dist dir"
+	@rm -rf ./dist
 
-build: clean
+build:
 	@echo "> Build go application"
 	go build ${BUILD_FLAGS} -o generator main.go
 
@@ -53,6 +53,10 @@ format:
 		echo "gofmt checking failed!"; echo "$${fmtRes}"; echo; \
 		exit 1; \
 	fi
+
+start: build
+	@echo ">> Launch generator locally"
+	CONFIGMAP_PATH=conf ./generator
 
 version:
 	@echo $(VERSION)
