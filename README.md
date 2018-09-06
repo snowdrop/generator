@@ -31,6 +31,50 @@ time="2018-08-31T16:18:01Z" level=info msg="Generate zip : /app"
 time="2018-08-31T16:18:01Z" level=info msg="Config : /config"
 ```
 
+or using the makefile
+
+```bash
+make start
+>> writing assets
+cd /Users/dabou/Code/go-workspace/src/github.com/snowdrop/generator/pkg/template && go generate
+writing assets_vfsdata.go
+> Build go application
+go build -ldflags="-w -X main.GITCOMMIT=77d3113 -X main.VERSION=0.0.666" -o generator main.go
+>> Launch generator locally
+CONFIGMAP_PATH=conf ./generator
+INFO[0000] Log level : info                             
+INFO[0000] Parsing Generator's Config at conf/generator.yaml 
+INFO[0000] File template : /crud/pom.xml                
+INFO[0000] File template : /crud/src/main/java/dummy/CrudApplication.java 
+INFO[0000] File template : /crud/src/main/java/dummy/exception/NotFoundException.java 
+INFO[0000] File template : /crud/src/main/java/dummy/exception/UnprocessableEntityException.java 
+INFO[0000] File template : /crud/src/main/java/dummy/exception/UnsupportedMediaTypeException.java 
+INFO[0000] File template : /crud/src/main/java/dummy/service/Fruit.java 
+INFO[0000] File template : /crud/src/main/java/dummy/service/FruitController.java 
+INFO[0000] File template : /crud/src/main/java/dummy/service/FruitRepository.java 
+INFO[0000] File template : /crud/src/main/resources/application-openshift-catalog.properties 
+INFO[0000] File template : /crud/src/main/resources/application-openshift.properties 
+INFO[0000] File template : /crud/src/main/resources/import.sql 
+INFO[0000] File template : /crud/src/main/resources/static/index.html 
+INFO[0000] File template : /crud/src/test/java/dummy/BoosterApplicationTest.java 
+INFO[0000] File template : /crud/src/test/resources/logback-test.xml 
+INFO[0000] File template : /rest/pom.xml                
+INFO[0000] File template : /rest/src/main/java/dummy/RestApplication.java 
+INFO[0000] File template : /rest/src/main/java/dummy/service/Greeting.java 
+INFO[0000] File template : /rest/src/main/java/dummy/service/GreetingEndpoint.java 
+INFO[0000] File template : /rest/src/main/resources/application.properties 
+INFO[0000] File template : /rest/src/main/resources/static/index.html 
+INFO[0000] File template : /rest/src/test/java/dummy/DemoApplicationTest.java 
+INFO[0000] File template : /simple/pom.xml              
+INFO[0000] File template : /simple/src/main/java/dummy/DemoApplication.java 
+INFO[0000] File template : /simple/src/main/resources/application.properties 
+INFO[0000] File template : /simple/src/test/java/dummy/DemoApplicationTest.java 
+INFO[0000] Starting Spring Boot Generator Server on port 8000 - Version 0.0.666 (77d3113) 
+INFO[0000] The following REST endpoints are available :  
+INFO[0000] Generate zip : /app                          
+INFO[0000] Config : /config                             
+```
+
 Next, in a separate terminal window, execute a `curl` or `httpie` request
 
 ```bash
