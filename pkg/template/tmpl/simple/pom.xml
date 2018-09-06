@@ -26,8 +26,9 @@
   <dependencies>{{ range .Dependencies }}
     <dependency>
       <groupId>{{.GroupId}}</groupId>
-      <artifactId>{{.ArtifactId}}</artifactId>
-      {{ if .Version}}<version>{{.Version}}</version>{{ end }}{{ if .Scope }}<scope>{{.Scope}}</scope>{{ end }}
+      <artifactId>{{.ArtifactId}}</artifactId>{{ if .Version}}
+      <version>{{.Version}}</version>{{ end }}{{ if .Scope }}
+      <scope>{{.Scope}}</scope>{{ end }}
     </dependency>{{ end }}
   </dependencies>
   {{ else }}
