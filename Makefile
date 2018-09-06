@@ -1,8 +1,11 @@
+VERSION     ?= 0.0.666
+GO          ?= go
+GOFMT       ?= $(GO)fmt
+
 PROJECT     := github.com/snowdrop/generator
 GITCOMMIT   := $(shell git rev-parse --short HEAD 2>/dev/null)
 BUILD_FLAGS := -ldflags="-w -X main.GITCOMMIT=$(GITCOMMIT) -X main.VERSION=$(VERSION)"
-GO          ?= go
-GOFMT       ?= $(GO)fmt
+
 
 VFSGENDEV   := $(GOPATH)/bin/vfsgendev
 VFSGENDEV_SRC := $(GOPATH)/src/github.com/shurcooL/vfsgen
@@ -26,7 +29,7 @@ $(VFSGENDEV_SRC):
 
 build: assets
 	@echo "> Build go application"
-	go build ${BUILD_FLAGS} -o generator main.go
+	go build $(BUILD_FLAGS) -o generator main.go
 
 cross: clean
 	gox -osarch="darwin/amd64 linux/amd64" -output="dist/bin/{{.OS}}-{{.Arch}}/generator" $(BUILD_FLAGS)
