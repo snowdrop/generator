@@ -28,9 +28,8 @@
       <groupId>{{.GroupId}}</groupId>
       <artifactId>{{.ArtifactId}}</artifactId>
       {{ if .Version}}<version>{{.Version}}</version>{{ end }}{{ if .Scope }}<scope>{{.Scope}}</scope>{{ end }}
-    </dependency>
+    </dependency>{{ end }}
   </dependencies>
-  {{ end }}
   {{ else }}
   <dependencies>
     <dependency>
