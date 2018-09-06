@@ -14,7 +14,17 @@ clean:
 	@echo "> Remove dist dir"
 	@rm -rf ./dist
 
-build:
+assets: $(VFSGENDEV)
+	@echo ">> writing assets"
+	cd $(PREFIX)/pkg/template && go generate
+
+$(VFSGENDEV): $(VFSGENDEV_SRC)
+	go get -u github.com/shurcooL/vfsgen/cmd/vfsgendev
+
+$(VFSGENDEV_SRC):
+	go get -u github.com/shurcooL/vfsgen
+
+build: assets
 	@echo "> Build go application"
 	go build ${BUILD_FLAGS} -o generator main.go
 
@@ -35,16 +45,6 @@ prepare-release: cross
 
 upload: prepare-release
 	./scripts/upload_assets.sh
-
-assets: $(VFSGENDEV)
-	@echo ">> writing assets"
-	cd $(PREFIX)/pkg/template && go generate
-
-$(VFSGENDEV): $(VFSGENDEV_SRC)
-	go get -u github.com/shurcooL/vfsgen/cmd/vfsgendev
-
-$(VFSGENDEV_SRC):
-	go get -u github.com/shurcooL/vfsgen
 
 format:
 	@echo ">> checking code style"
