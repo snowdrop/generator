@@ -19,7 +19,14 @@
         <version>${snowdrop-bom.version}</version>
         <type>pom</type>
         <scope>import</scope>
-       </dependency>
+       </dependency>{{ range .Modules }}{{ range .DependencyManagement }}{{ range .Dependencies }}
+       <dependency>
+         <groupId>{{.GroupId}}</groupId>
+         <artifactId>{{.ArtifactId}}</artifactId>{{ if .Version}}
+         <version>{{.Version}}</version>{{ end }}{{ if .Scope }}
+         <scope>{{.Scope}}</scope>{{ end }}{{ if .Type }}
+         <type>{{.Type}}</type>{{ end }}
+       </dependency>{{ end }}{{ end }}{{ end }}
     </dependencies>
   </dependencyManagement>
   {{ if .Dependencies }}

@@ -118,3 +118,24 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
+  - name: keycloak
+    description: "Open Source Identity and Access Management for Modern Applications and Services"
+    guide_ref : ""
+    tags:
+      - security
+      - sso
+      - keycloak
+      - iam
+    dependencies:
+      - artifactid: keycloak-spring-boot-starter
+        groupid: org.keycloak
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+    dependencymanagement:
+      - dependencies:
+          - artifactid: keycloak-spring-boot-starter
+            groupid: org.keycloak
+            scope: import
+            type: pom
+            version: '3.4.2.Final'

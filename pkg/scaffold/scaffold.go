@@ -52,11 +52,11 @@ func CreateDefaultProject() {
 }
 
 func GetCorrespondingSnowDropBom(version string) string {
-	log.Debugf("Version to search for %s",version)
+	log.Debugf("Version to search for %s", version)
 	for _, bom := range config.Boms {
-		log.Debugf("Bom is %s",bom)
+		log.Debugf("Bom is %s", bom)
 		if bom.Community == version {
-			log.Debugf("Matching for %s and %s",bom.Community,bom.Snowdrop)
+			log.Debugf("Matching for %s and %s", bom.Community, bom.Snowdrop)
 			return bom.Snowdrop
 		}
 	}
@@ -226,6 +226,7 @@ func addDependenciesToModule(configModules []Module, project *Project) {
 			if configModule.Name == pModule.Name {
 				log.Infof("Match found for project's module %s and modules %+v ", pModule.Name, configModule)
 				project.Modules[i].Dependencies = configModule.Dependencies
+				project.Modules[i].DependencyManagement = configModule.DependencyManagement
 			}
 		}
 	}
