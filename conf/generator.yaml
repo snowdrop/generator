@@ -1,7 +1,10 @@
 templates:
-  - crud
-  - rest
-  - simple
+  - name: crud
+    description: "An application with database connectivity and basic access methods."
+  - name: rest
+    description: "An application with database connectivity and a scaffolded REST API."
+  - name: simple
+    description: "A minimal application - modules & dependencies can be added below."
 bomversions:
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
