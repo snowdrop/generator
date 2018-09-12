@@ -21,7 +21,8 @@ where parameters could be :
 
 ## To run it locally
 
-Start the go generator server
+The golang version needed to run locally the generator is `1.11`.
+Start the go `generator` server using this command
 
 ```bash
 CONFIGMAP_PATH=conf go run main.go
