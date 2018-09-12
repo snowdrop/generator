@@ -40,7 +40,7 @@ type Module struct {
 	Guide                string                 `yaml:"guide_ref"                json:"guide_ref"`
 	Dependencies         []Dependency           `yaml:"dependencies"             json:"dependencies"`
 	DependencyManagement []DependencyManagement `yaml:"dependencymanagement"     json:"dependencymanagement"`
-	tags                 []string               `yaml:"tags"                     json:"tags"`
+	Tags                 []string               `yaml:"tags"                     json:"tags"`
 }
 
 type DependencyManagement struct {
