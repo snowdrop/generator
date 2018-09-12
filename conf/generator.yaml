@@ -9,14 +9,14 @@ bomversions:
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
     default: true
-  - community : 1.5.14.RELEASE
+  - community: 1.5.14.RELEASE
     snowdrop: 1.5.14.Final
-  - community : 1.5.13.RELEASE
+  - community: 1.5.13.RELEASE
     snowdrop: 1.5.13.Final
 modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - core
     dependencies:
@@ -27,7 +27,7 @@ modules:
         scope: test
   - name: web
     description: "Web"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - web
       - web-mvc
@@ -40,7 +40,7 @@ modules:
         scope: test
   - name: websocket
     description: "Websocket full-duplex communication and streaming of messages"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - websocket
       - dual communication
@@ -52,7 +52,7 @@ modules:
         scope: test
   - name: jaxrs
     description: "Apache CXF Starter implementing JAX-RS specification"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - jax-rs
       - RESTFull
@@ -64,7 +64,7 @@ modules:
         scope: test
   - name: jpa
     description: "Java Persistence - JPA, JDBC"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - orm
       - hibernate
@@ -82,7 +82,7 @@ modules:
         scope: test
   - name: monitoring
     description: "Monitor and manage your application using Jolokia, Prometheus, ..."
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - monitoring
       - jolokia
@@ -95,7 +95,7 @@ modules:
         scope: test
   - name: integration
     description: "Apache Camel Routing and Mediation framework"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - integration
       - camel
@@ -110,7 +110,7 @@ modules:
         scope: test
   - name: cloud-kubernetes
     description: "Cloud Kubernetes modules to discover client, mount config map, secret"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - cloud
       - kubernetes
@@ -127,7 +127,7 @@ modules:
         scope: test
   - name: keycloak
     description: "Open Source Identity and Access Management for Modern Applications and Services"
-    guide_ref : ""
+    guide_ref: ""
     tags:
       - security
       - sso
