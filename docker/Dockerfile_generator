@@ -1,6 +1,6 @@
 # The builder will be used to generate the executable (named 'bootstrap')
 # which upon invocation will create the necessary 'supervisor.conf' file
-FROM golang:1.9.4 as builder
+FROM golang:1.11 as builder
 
 ARG VERSION=unset
 ARG GITCOMMIT=HEAD
