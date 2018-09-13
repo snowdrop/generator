@@ -10,7 +10,7 @@ The format of the request is defined as such
 `http://GENERATOR_HOST/app?param1=val1&param2&val2....`
 
 where parameters could be :
-  - `{template}` is one of the templates available: crud, simple, rest, ...
+  - `{template}` is one of the templates available: crud, custom, rest, ...
   - `{groupId}` is the GAV's group
   - `{artifactId}` is the GAV's artifact
   - `{version}` is the GAV's version
@@ -66,10 +66,10 @@ INFO[0000] File template : /rest/src/main/java/dummy/service/GreetingEndpoint.ja
 INFO[0000] File template : /rest/src/main/resources/application.properties 
 INFO[0000] File template : /rest/src/main/resources/static/index.html 
 INFO[0000] File template : /rest/src/test/java/dummy/DemoApplicationTest.java 
-INFO[0000] File template : /simple/pom.xml              
-INFO[0000] File template : /simple/src/main/java/dummy/DemoApplication.java 
-INFO[0000] File template : /simple/src/main/resources/application.properties 
-INFO[0000] File template : /simple/src/test/java/dummy/DemoApplicationTest.java 
+INFO[0000] File template : /custom/pom.xml              
+INFO[0000] File template : /custom/src/main/java/dummy/DemoApplication.java 
+INFO[0000] File template : /custom/src/main/resources/application.properties 
+INFO[0000] File template : /custom/src/test/java/dummy/DemoApplicationTest.java 
 INFO[0000] Starting Spring Boot Generator Server on port 8000 - Version 0.0.666 (77d3113) 
 INFO[0000] The following REST endpoints are available :  
 INFO[0000] Generate zip : /app                          
@@ -95,7 +95,7 @@ http :8000/app \
    springbootversion==1.5.15.RELEASE \
    module==web \
    module==keycloak \
-   template==simple  > demo.zip  
+   template==custom  > demo.zip  
 ``` 
 
 Unzip the file

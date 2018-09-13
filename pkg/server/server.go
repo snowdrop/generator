@@ -51,7 +51,7 @@ func init() {
 	scaffold.ParseGeneratorConfigFile(pathConfigMap)
 	scaffold.CreateDefaultProject()
 
-	// Create the Go Templates from the Spring Boot template directory (crud, web, simple, ....)
+	// Create the Go Templates from the Spring Boot template directory (crud, web, custom, ....)
 	scaffold.CollectVfsTemplates()
 
 	rand.Seed(time.Now().UnixNano())
@@ -145,11 +145,11 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 		p.SnowdropBomVersion = scaffold.GetCorrespondingSnowDropBom(p.SpringBootVersion)
 	}
 
-	// As dependencies and template selection can't be used together, we force the template to be equal to "simple"
+	// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
 	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
 	// which are incompatible or not fully tested with the template proposed
-	if len(getArrayVal(r, "module", params)) > 0 && p.Template != "simple" {
-		p.Template = "simple"
+	if len(getArrayVal(r, "module", params)) > 0 && p.Template != "custom" {
+		p.Template = "custom"
 	}
 
 	log.Info("Project : ", p)

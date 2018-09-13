@@ -11,14 +11,14 @@ import (
 
 var (
 	templateFiles []string
-	project       = "simple"
+	project       = "custom"
 )
 
 func TestVfsSimpleJavaProject(t *testing.T) {
 	tExpectedFiles := []string{
-		"simple/pom.xml",
-		"simple/src/main/java/dummy/DemoApplication.java",
-		"simple/src/main/resources/application.properties",
+		"custom/pom.xml",
+		"custom/src/main/java/dummy/DemoApplication.java",
+		"custom/src/main/resources/application.properties",
 	}
 
 	tFiles := walkTree()

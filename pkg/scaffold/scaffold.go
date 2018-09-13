@@ -46,7 +46,7 @@ func CreateDefaultProject() {
 		Version:            "0.0.1-SNAPSHOT",
 		SnowdropBomVersion: snowdropBomVersion,
 		SpringBootVersion:  springBootBomVersion,
-		Template:           "simple",
+		Template:           "custom",
 	}
 	log.Debug(">> Default Project created : ", p)
 }
