@@ -31,7 +31,6 @@ modules:
     tags:
       - web
       - web-mvc
-      - RESTfull
     dependencies:
       - artifactid: spring-boot-starter-web
         groupid: org.springframework.boot
@@ -42,8 +41,9 @@ modules:
     description: "Websocket full-duplex communication and streaming of messages"
     guide_ref: ""
     tags:
+      - web
       - websocket
-      - dual communication
+      - duplex
     dependencies:
       - artifactid: spring-boot-starter-websocket
         groupid: org.springframework.boot
@@ -55,7 +55,7 @@ modules:
     guide_ref: ""
     tags:
       - jax-rs
-      - RESTFull
+      - web
     dependencies:
       - artifactid: cxf-spring-boot-starter-jaxrs
         groupid: org.apache.cxf
