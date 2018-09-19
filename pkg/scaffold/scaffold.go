@@ -48,6 +48,7 @@ func CreateDefaultProject() {
 		SpringBootVersion:  springBootBomVersion,
 		Template:           "custom",
 	}
+	p.ExtraProperties = GetConfig().ExtraProperties
 	log.Debug(">> Default Project created : ", p)
 }
 
