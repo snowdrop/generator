@@ -13,6 +13,8 @@ bomversions:
     snowdrop: 1.5.14.Final
   - community: 1.5.13.RELEASE
     snowdrop: 1.5.13.Final
+extraProperties:
+  fmpVersion: 3.5.41
 modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"

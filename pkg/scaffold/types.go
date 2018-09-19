@@ -13,6 +13,7 @@ type Project struct {
 
 	Modules      []Module `yaml:"modules"           json:"modules"`
 	Dependencies []Dependency
+	ExtraProperties   ExtraProperties
 
 	UrlService string `yaml:"urlservice"           json:"urlservice"`
 }
@@ -21,6 +22,7 @@ type Config struct {
 	Templates []Template `yaml:"templates"    json:"templates"`
 	Boms      []Bom      `yaml:"bomversions"  json:"bomversions"`
 	Modules   []Module   `yaml:"modules"      json:"modules"`
+	ExtraProperties   ExtraProperties   `yaml:"extraProperties"      json:"extraProperties"`
 }
 
 type Template struct {
@@ -32,6 +34,10 @@ type Bom struct {
 	Community string `yaml:"community" json:"community"`
 	Snowdrop  string `yaml:"snowdrop"  json:"snowdrop"`
 	Default   bool   `yaml:"default"  json:"default"`
+}
+
+type ExtraProperties struct {
+	FmpVersion string `yaml:"fmpVersion" json:"fmpVersion"`
 }
 
 type Module struct {
