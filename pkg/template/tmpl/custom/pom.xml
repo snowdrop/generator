@@ -3,8 +3,8 @@
   <groupId>{{.GroupId}}</groupId>
   <artifactId>{{.ArtifactId}}</artifactId>
   <version>{{.Version}}</version>
-  <name>Spring Boot - HTTP Booster</name>
-  <description>Spring Boot - HTTP Booster</description>
+  <name>Spring Boot - Custome Application</name>
+  <description>Spring Boot - Custom application</description>
 
   <properties>
     <snowdrop-bom.version>{{.SnowdropBomVersion}}</snowdrop-bom.version>
