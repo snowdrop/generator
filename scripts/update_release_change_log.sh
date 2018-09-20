@@ -24,7 +24,7 @@ git fetch --prune origin "+refs/tags/*:refs/tags/*"
 PREVIOUS_TAG=$(git describe --abbrev=0 ${CURRENT_TAG}^ --tags)
 
 # we use the contents of the commits between the current and previous tag as the release body
-RELEASE_BODY=$(git log --decorate=short --pretty=format:'%h %d%  %s\n' v0.0.20..v0.1.0 | sed -e "s/(.*tag: ${CURRENT_TAG}.*) /(tag: ${CURRENT_TAG}) /g" | paste -sd "" -)
+RELEASE_BODY=$(git log --decorate=short --pretty=format:'%h %d%  %s\n' ${PREVIOUS_TAG}..${CURRENT_TAG} | sed -e "s/(.*tag: ${CURRENT_TAG}.*) /(tag: ${CURRENT_TAG}) /g" | paste -sd "" -)
 
 GH_RELEASE_URL="${GH_REPO}/releases/$id"
 echo "GH_RELEASE_URL : $GH_RELEASE_URL"
