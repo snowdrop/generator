@@ -62,6 +62,9 @@ jobs:
 
               # Remove the trigger tag
               scripts/delete_release_manually.sh "${GITHUB_API_TOKEN}" "${CIRCLE_TAG}"
+
+              # Add the commits that correspond to the tag to the description of the GitHub reelase
+              scripts/update_release_change_log.sh "${GITHUB_API_TOKEN}" "${CIRCLE_TAG}"
             else
               echo "${CIRCLE_TAG} does NOT match the expected pattern. This is probably a job configuration issue"
               exit 1
