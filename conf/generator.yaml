@@ -2,9 +2,11 @@ templates:
   - name: crud
     description: "An application with database connectivity and basic access methods."
   - name: rest
-    description: "An application with database connectivity and a scaffolded REST API."
+    description: "A Spring Boot REST Application."
   - name: custom
-    description: "A custom application - modules & dependencies can be added below."
+    description: "A custom application - modules can be added below."
+  - name: jsp
+    description: "A Spring Boot Web JSP/JSTL application."
 bomversions:
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
