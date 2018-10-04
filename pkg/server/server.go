@@ -101,6 +101,7 @@ func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Headers",
 			"Accept, Content-Type, Content-Length, Accept-Encoding, X-Requested-With, remember-me, X-CSRF-Token, Authorization")
 	}
+	w.Header().Set("Content-Type", "application/json")
 	jsonStr, _ := json.Marshal(scaffold.GetConfig())
 	fmt.Fprintf(w, "%s", jsonStr)
 }
