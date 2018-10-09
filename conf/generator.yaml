@@ -8,9 +8,11 @@ templates:
   - name: jsp
     description: "A Spring Boot Web JSP/JSTL application."
 bomversions:
+  - community: 1.5.16.RELEASE
+    snowdrop: 1.5.16.SP1
+    default: true
   - community : 1.5.15.RELEASE
     snowdrop: 1.5.15.Final
-    default: true
   - community: 1.5.14.RELEASE
     snowdrop: 1.5.14.Final
   - community: 1.5.13.RELEASE
@@ -143,10 +145,3 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-    dependencymanagement:
-      - dependencies:
-          - artifactid: keycloak-spring-boot-starter
-            groupid: org.keycloak
-            scope: import
-            type: pom
-            version: '3.4.2.Final'
