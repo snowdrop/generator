@@ -223,10 +223,11 @@ modules:
         groupid: org.springframework.boot
         scope: test
   - name: amqp
-    description: "AMQP client with JMS API"
+    description: "AMQP v1.0 client with JMS API"
     guide_ref: ""
     tags:
       - messaging
+      - qpid
       - jms
       - amqp
     dependencies:
