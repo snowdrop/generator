@@ -43,6 +43,21 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
+  - name: undertow
+    description: "Undertow web server"
+    guide_ref: ""
+    tags:
+      - web
+    dependencies:
+      - artifactid: spring-boot-starter-undertow
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter
+        groupid: org.springframework.boot
+      - artifactid: spring-web
+        groupid: org.springframework
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
   - name: websocket
     description: "Websocket full-duplex communication and streaming of messages"
     guide_ref: ""
@@ -142,6 +157,106 @@ modules:
     dependencies:
       - artifactid: keycloak-spring-boot-starter
         groupid: org.keycloak
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: tracing
+    description: "Distributed tracing with OpenTracing"
+    guide_ref: ""
+    tags:
+      - tracing
+      - monitoring
+    dependencies:
+      - artifactid: opentracing-spring-jaeger-web-starter
+        groupid: io.opentracing.contrib
+      - artifactid: spring-boot-starter
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: infinispan
+    description: "Remote Infinispan cache and datagrid"
+    guide_ref: ""
+    tags:
+      - persistence
+      - cache
+    dependencies:
+      - artifactid: infinispan-spring-boot-starter-remote
+        groupid: org.infinispan
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: infinispan-embedded
+    description: "Embedded Infinispan cache and datagrid"
+    guide_ref: ""
+    tags:
+      - persistence
+      - cache
+    dependencies:
+      - artifactid: infinispan-spring-boot-starter-embedded
+        groupid: org.infinispan
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: artemis
+    description: "Artemis message broker"
+    guide_ref: ""
+    tags:
+      - messaging
+      - jms
+    dependencies:
+      - artifactid: spring-boot-starter-artemis
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: activemq
+    description: "ActiveMQ message broker"
+    guide_ref: ""
+    tags:
+      - messaging
+      - jms
+    dependencies:
+      - artifactid: spring-boot-starter-activemq
+        groupid: org.springframework.boot
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: amqp
+    description: "AMQP v1.0 client with JMS API"
+    guide_ref: ""
+    tags:
+      - messaging
+      - qpid
+      - jms
+      - amqp
+    dependencies:
+      - artifactid: amqp-10-jms-spring-boot-starter
+        groupid: org.amqphub.spring
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: jta
+    description: "Narayana transaction manager"
+    guide_ref: ""
+    tags:
+      - transactions
+      - jta
+    dependencies:
+      - artifactid: narayana-spring-boot-starter
+        groupid: me.snowdrop
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: validation
+    description: "Hibernate validator"
+    guide_ref: ""
+    tags:
+      - validation
+      - hibernate
+    dependencies:
+      - artifactid: spring-boot-starter-validation
+        groupid: org.springframework.boot
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
