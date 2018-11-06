@@ -11,18 +11,18 @@ type Project struct {
 	SnowdropBomVersion string `yaml:"snowdropbom"       json:"snowdropbom"`
 	SpringBootVersion  string `yaml:"springbootversion" json:"springbootversion"`
 
-	Modules      []Module `yaml:"modules"           json:"modules"`
-	Dependencies []Dependency
-	ExtraProperties   ExtraProperties
+	Modules         []Module `yaml:"modules"           json:"modules"`
+	Dependencies    []Dependency
+	ExtraProperties ExtraProperties
 
 	UrlService string `yaml:"urlservice"           json:"urlservice"`
 }
 
 type Config struct {
-	Templates []Template `yaml:"templates"    json:"templates"`
-	Boms      []Bom      `yaml:"bomversions"  json:"bomversions"`
-	Modules   []Module   `yaml:"modules"      json:"modules"`
-	ExtraProperties   ExtraProperties   `yaml:"extraProperties"      json:"extraProperties"`
+	Templates       []Template      `yaml:"templates"    json:"templates"`
+	Boms            []Bom           `yaml:"bomversions"  json:"bomversions"`
+	Modules         []Module        `yaml:"modules"      json:"modules"`
+	ExtraProperties ExtraProperties `yaml:"extraProperties"      json:"extraProperties"`
 }
 
 type Template struct {
