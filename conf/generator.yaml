@@ -3,6 +3,8 @@ templates:
     description: "An application with database connectivity and basic access methods."
   - name: rest
     description: "A Spring Boot REST Application."
+  - name: client
+    description: "A Spring Boot REST Client Application."
   - name: custom
     description: "A custom application - modules can be added below."
   - name: jsp
