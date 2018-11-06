@@ -76,7 +76,7 @@ INFO[0000] Generate zip : /app
 INFO[0000] Config : /config                             
 ```
 
-Next, in a separate terminal window, execute a `curl` or `httpie` request
+Next, in a separate terminal window, execute a `curl` or `httpie` request to create a custom project using one of the `modules` or a `template`
 
 ```bash
 curl http://localhost:8000/app \
@@ -95,7 +95,7 @@ http :8000/app \
    springbootversion==1.5.15.RELEASE \
    module==web \
    module==keycloak \
-   template==custom  > demo.zip  
+   template==custom > demo.zip  
 ``` 
 
 Unzip the file
