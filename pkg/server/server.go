@@ -49,7 +49,6 @@ func init() {
 	// - Different Snowdrop/Community BOMs
 	// - Modules and their dependencies associated / the starters
 	scaffold.ParseGeneratorConfigFile(pathConfigMap)
-	scaffold.CreateDefaultProject()
 
 	// Create the Go Templates from the Spring Boot template directory (crud, web, custom, ....)
 	scaffold.CollectVfsTemplates()
