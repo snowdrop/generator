@@ -33,13 +33,8 @@ func GetConfig() *Config {
 }
 
 func GetDefaultProject() *Project {
-	return p
-}
-
-//Create a new Default Project using default values
-func CreateDefaultProject() {
 	springBootBomVersion, snowdropBomVersion := getDefaultBOM()
-	p = &Project{
+	p := &Project{
 		GroupId:            "com.example",
 		ArtifactId:         "demo",
 		PackageName:        "com.example.demo",
@@ -49,7 +44,7 @@ func CreateDefaultProject() {
 		Template:           "custom",
 	}
 	p.ExtraProperties = GetConfig().ExtraProperties
-	log.Debug(">> Default Project created : ", p)
+	return p
 }
 
 func GetCorrespondingSnowDropBom(version string) string {
