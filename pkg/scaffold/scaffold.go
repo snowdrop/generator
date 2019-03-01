@@ -2,6 +2,7 @@ package scaffold
 
 import (
 	"bytes"
+	"github.com/blang/semver"
 	"io/ioutil"
 	"os"
 	"path"
@@ -11,7 +12,6 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/shurcooL/httpfs/vfsutil"
 	log "github.com/sirupsen/logrus"
-
 	tmpl "github.com/snowdrop/generator/pkg/template"
 )
 
@@ -220,12 +220,38 @@ func addDependenciesToModule(configModules []Module, project *Project) {
 	for _, configModule := range configModules {
 		for i, pModule := range project.Modules {
 			if configModule.Name == pModule.Name {
-				log.Infof("Match found for project's module %s and modules %+v ", pModule.Name, configModule)
-				project.Modules[i].Dependencies = configModule.Dependencies
-				project.Modules[i].DependencyManagement = configModule.DependencyManagement
+				// check if the module is available for the project's requested BOM
+				sbVersion := project.SpringBootVersion
+				if configModule.IsAvailableFor(sbVersion) {
+					log.Infof("Match found for project's module %s and modules %+v ", pModule.Name, configModule)
+					project.Modules[i].Dependencies = configModule.Dependencies
+					project.Modules[i].DependencyManagement = configModule.DependencyManagement
+				} else {
+					log.Infof("Ignoring module %s matching an existing module not available for SB version %s", pModule.Name, sbVersion)
+				}
 			}
 		}
 	}
+}
+
+func (m Module) IsAvailableFor(bomVersion string) bool {
+	if len(m.Availability) != 0 {
+		// remove .RELEASE from BOM version if present since it's not part of semantic versioning
+		i := strings.Index(bomVersion, ".RELEASE")
+		if i > 0 {
+			bomVersion = bomVersion[:i]
+			log.Info(bomVersion)
+		}
+
+		sbVersion := semver.MustParse(bomVersion)
+		versionRange, err := semver.ParseRange(m.Availability)
+		if err != nil {
+			log.Warningf("Invalid availability range %s, marking module as unavailable: %v", m.Availability, err)
+			return false
+		}
+		return versionRange(sbVersion)
+	}
+	return true
 }
 
 func convertPackageToPath(p string) string {

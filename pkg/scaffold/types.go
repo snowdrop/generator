@@ -47,6 +47,7 @@ type Module struct {
 	Dependencies         []Dependency           `yaml:"dependencies"             json:"dependencies"`
 	DependencyManagement []DependencyManagement `yaml:"dependencymanagement"     json:"dependencymanagement"`
 	Tags                 []string               `yaml:"tags"                     json:"tags"`
+	Availability         string                 `yaml:"availability,omitempty"   json:"availability,omitempty"`
 }
 
 type DependencyManagement struct {

@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/blang/semver"
+  packages = ["."]
+  revision = "2ee87856327ba09384cabd113bc6b5d174e9ec0f"
+  version = "v3.5.1"
+
+[[projects]]
   name = "github.com/ghodss/yaml"
   packages = ["."]
   revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
@@ -55,6 +61,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "79fa7998571de44d745dada8ada3198727fc8536fb8951653e25fc9ee3728f20"
+  inputs-digest = "92bfe3c3bb60936fd0d7c582376f159b9c15cbef405b9fdb38c7c41af65babcd"
   solver-name = "gps-cdcl"
   solver-version = 1
