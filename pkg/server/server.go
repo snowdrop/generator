@@ -35,13 +35,15 @@ func init() {
 
 	// Check env vars
 	s := os.Getenv("SERVER_PORT")
-	if s != "" {
+	if len(s) != 0 {
 		port = s
 	}
 
 	cm := os.Getenv("CONFIGMAP_PATH")
-	if cm != "" {
+	if len(cm) != 0 {
 		pathConfigMap = cm
+	} else {
+		pathConfigMap = filepath.Join(currentDir, "conf")
 	}
 
 	// Parse Generator Config YAML file to load :
