@@ -73,6 +73,7 @@ modules:
         scope: test
   - name: jaxrs-cxf
     description: "Apache CXF Starter implementing JAX-RS specification"
+    availability: ">=1.5.x <2.0.0"
     guide_ref: ""
     tags:
       - jax-rs
@@ -86,6 +87,7 @@ modules:
         scope: test
   - name: jaxrs-resteasy
     description: "RESTEasy Starter implementing JAX-RS specification"
+    availability: ">=2.1.2"
     guide_ref: ""
     tags:
       - jax-rs
