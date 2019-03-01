@@ -2,7 +2,6 @@ package scaffold
 
 import (
 	"bytes"
-	"github.com/blang/semver"
 	"io/ioutil"
 	"os"
 	"path"
@@ -232,26 +231,6 @@ func addDependenciesToModule(configModules []Module, project *Project) {
 			}
 		}
 	}
-}
-
-func (m Module) IsAvailableFor(bomVersion string) bool {
-	if len(m.Availability) != 0 {
-		// remove .RELEASE from BOM version if present since it's not part of semantic versioning
-		i := strings.Index(bomVersion, ".RELEASE")
-		if i > 0 {
-			bomVersion = bomVersion[:i]
-			log.Info(bomVersion)
-		}
-
-		sbVersion := semver.MustParse(bomVersion)
-		versionRange, err := semver.ParseRange(m.Availability)
-		if err != nil {
-			log.Warningf("Invalid availability range %s, marking module as unavailable: %v", m.Availability, err)
-			return false
-		}
-		return versionRange(sbVersion)
-	}
-	return true
 }
 
 func convertPackageToPath(p string) string {

@@ -1,5 +1,13 @@
 package scaffold
 
+import (
+	"github.com/blang/semver"
+	"github.com/sirupsen/logrus"
+	"strings"
+)
+
+const releaseSuffix = ".RELEASE"
+
 type Project struct {
 	GroupId     string `yaml:"groupid"           json:"groupid"`
 	ArtifactId  string `yaml:"artifactid"        json:"artifactid"`
@@ -48,6 +56,26 @@ type Module struct {
 	DependencyManagement []DependencyManagement `yaml:"dependencymanagement"     json:"dependencymanagement"`
 	Tags                 []string               `yaml:"tags"                     json:"tags"`
 	Availability         string                 `yaml:"availability,omitempty"   json:"availability,omitempty"`
+}
+
+func (m Module) IsAvailableFor(bomVersion string) bool {
+	if len(m.Availability) != 0 {
+		// remove .RELEASE from BOM version if present since it's not part of semantic versioning
+		i := strings.Index(bomVersion, releaseSuffix)
+		if i > 0 {
+			bomVersion = bomVersion[:i]
+			logrus.Info(bomVersion)
+		}
+
+		sbVersion := semver.MustParse(bomVersion)
+		versionRange, err := semver.ParseRange(m.Availability)
+		if err != nil {
+			logrus.Warningf("Invalid availability range %s, marking module as unavailable: %v", m.Availability, err)
+			return false
+		}
+		return versionRange(sbVersion)
+	}
+	return true
 }
 
 type DependencyManagement struct {
