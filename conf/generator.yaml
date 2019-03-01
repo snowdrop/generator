@@ -71,15 +71,29 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-  - name: jaxrs
+  - name: jaxrs-cxf
     description: "Apache CXF Starter implementing JAX-RS specification"
     guide_ref: ""
     tags:
       - jax-rs
+      - cxf
       - web
     dependencies:
       - artifactid: cxf-spring-boot-starter-jaxrs
         groupid: org.apache.cxf
+      - artifactid: spring-boot-starter-test
+        groupid: org.springframework.boot
+        scope: test
+  - name: jaxrs-resteasy
+    description: "RESTEasy Starter implementing JAX-RS specification"
+    guide_ref: ""
+    tags:
+      - jax-rs
+      - resteasy
+      - web
+    dependencies:
+      - artifactid: resteasy-spring-boot-starter
+        groupid: org.jboss.resteasy
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
