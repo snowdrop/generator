@@ -59,14 +59,17 @@ func init() {
 }
 
 func Run(version string, gitcommit string) {
+	router := mux.NewRouter()
+	router.HandleFunc("/app", CreateZipFile).Methods("GET").Name("Generate zip")
+	router.HandleFunc("/config", PopulateJSONConfig).Methods("GET").Name("Config")
+
 	log.Infof("Starting Spring Boot Generator Server on port %s - Version %s (%s)", port, version, gitcommit)
 	log.Infof("The following REST endpoints are available : ")
-	log.Infof("Generate zip : %s", "/app")
-	log.Infof("Config : %s", "/config")
-
-	router := mux.NewRouter()
-	router.HandleFunc("/app", CreateZipFile).Methods("GET")
-	router.HandleFunc("/config", PopulateJSONConfig).Methods("GET")
+	_ = router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		path, _ := route.GetPathTemplate()
+		log.Infof("%s: %s", route.GetName(), path)
+		return nil
+	})
 
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
