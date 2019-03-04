@@ -164,16 +164,16 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 			pathF := strings.Join([]string{dir, outDir, path.Dir(tFileName)}, "/")
 			log.Debugf("## Path : %s", pathF)
 			pathConverted := strings.Replace(pathF, dummyDirName, convertPackageToPath(project.PackageName), -1)
-			log.Debugf("Path converted: ", pathF)
+			log.Debugf("Path converted: %s", pathF)
 
 			// Convert FileName
 			fileName := strings.Join([]string{dir, outDir, tFileName}, "/")
 			log.Debugf("## File name : %s", fileName)
 			fileNameConverted := strings.Replace(fileName, dummyDirName, convertPackageToPath(project.PackageName), -1)
-			log.Debugf("File name converted : ", fileNameConverted)
+			log.Debugf("File name converted : %s", fileNameConverted)
 
 			// Create missing folders
-			log.Debugf("Path to generated file : ", pathConverted)
+			log.Debugf("Path to generated file : %s", pathConverted)
 			os.MkdirAll(pathConverted, os.ModePerm)
 
 			// Content generated
@@ -235,6 +235,6 @@ func addDependenciesToModule(configModules []Module, project *Project) {
 
 func convertPackageToPath(p string) string {
 	c := strings.Replace(p, ".", "/", -1)
-	log.Debugf("Converted path : ", c)
+	log.Debugf("Converted path : %s", c)
 	return c
 }
