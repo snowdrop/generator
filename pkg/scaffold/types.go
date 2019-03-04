@@ -33,8 +33,33 @@ type Config struct {
 	ExtraProperties ExtraProperties `yaml:"extraProperties"      json:"extraProperties"`
 }
 
+func (c *Config) GetCorrespondingSnowDropBom(version string) string {
+	logrus.Debugf("Version to search for %s", version)
+	for _, bom := range c.Boms {
+		logrus.Debugf("Bom is %v", bom)
+		if bom.Community == version {
+			logrus.Debugf("Matching for %s and %s", bom.Community, bom.Snowdrop)
+			return bom.Snowdrop
+		}
+	}
+	return ""
+}
+
+func (c *Config) IsBOMVersionSupported(version string) bool {
+	// Add .RELEASE if it's not present since it's expected in the configuration
+	i := strings.Index(version, releaseSuffix)
+	if i < 0 {
+		version = version + releaseSuffix
+	}
+
+	return len(c.GetCorrespondingSnowDropBom(version)) != 0
+}
+
 func (c *Config) GetModulesCompatibleWith(version string) []Module {
-	return keepModulesCompatibleWith(c.Modules, version)
+	if c.IsBOMVersionSupported(version) {
+		return keepModulesCompatibleWith(c.Modules, version)
+	}
+	return []Module{}
 }
 
 func keepModulesCompatibleWith(modules []Module, version string) []Module {
@@ -77,7 +102,6 @@ func (m Module) IsAvailableFor(bomVersion string) bool {
 	i := strings.Index(bomVersion, releaseSuffix)
 	if i > 0 {
 		bomVersion = bomVersion[:i]
-		logrus.Info(bomVersion)
 	}
 
 	// if provided version is incorrect, module should not be available

@@ -46,18 +46,6 @@ func GetDefaultProject() *Project {
 	return p
 }
 
-func GetCorrespondingSnowDropBom(version string) string {
-	log.Debugf("Version to search for %s", version)
-	for _, bom := range config.Boms {
-		log.Debugf("Bom is %v", bom)
-		if bom.Community == version {
-			log.Debugf("Matching for %s and %s", bom.Community, bom.Snowdrop)
-			return bom.Snowdrop
-		}
-	}
-	return ""
-}
-
 func ParseGeneratorConfigFile(pathConfigMap string) {
 
 	configPath := strings.Join([]string{pathConfigMap, configYamlName}, "/")
