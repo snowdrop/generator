@@ -33,6 +33,20 @@ type Config struct {
 	ExtraProperties ExtraProperties `yaml:"extraProperties"      json:"extraProperties"`
 }
 
+func (c *Config) GetModulesCompatibleWith(version string) []Module {
+	return keepModulesCompatibleWith(c.Modules, version)
+}
+
+func keepModulesCompatibleWith(modules []Module, version string) []Module {
+	compatible := make([]Module, 0, len(modules))
+	for _, module := range modules {
+		if module.IsAvailableFor(version) {
+			compatible = append(compatible, module)
+		}
+	}
+	return compatible
+}
+
 type Template struct {
 	Name        string `yaml:"name"                     json:"name"`
 	Description string `yaml:"description"              json:"description"`
@@ -67,11 +81,16 @@ func (m Module) IsAvailableFor(bomVersion string) bool {
 			logrus.Info(bomVersion)
 		}
 
-		sbVersion := semver.MustParse(bomVersion)
 		versionRange, err := semver.ParseRange(m.Availability)
 		if err != nil {
 			logrus.Warningf("Invalid availability range %s, marking module as unavailable: %v", m.Availability, err)
 			return false
+		}
+
+		sbVersion, err := semver.Parse(bomVersion)
+		if err != nil {
+			logrus.Warningf("Invalid input version %s, marking module as available: %v", bomVersion, err)
+			return true
 		}
 		return versionRange(sbVersion)
 	}
