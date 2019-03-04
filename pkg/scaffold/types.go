@@ -80,6 +80,7 @@ type Template struct {
 type Bom struct {
 	Community string `yaml:"community" json:"community"`
 	Snowdrop  string `yaml:"snowdrop"  json:"snowdrop"`
+	Supported string `yaml:"supported"  json:"supported"`
 	Default   bool   `yaml:"default"  json:"default"`
 }
 
