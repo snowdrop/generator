@@ -47,7 +47,7 @@ func init() {
 	}
 
 	// Parse Generator Config YAML file to load :
-	// - Templates available : crud, rest, sumple, ...
+	// - Templates available : crud, rest, simple, ...
 	// - Different Snowdrop/Community BOMs
 	// - Modules and their dependencies associated / the starters
 	scaffold.ParseGeneratorConfigFile(pathConfigMap)
