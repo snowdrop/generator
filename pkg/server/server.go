@@ -61,6 +61,7 @@ func init() {
 func Run(version string, gitcommit string) {
 	router := mux.NewRouter()
 	router.HandleFunc("/app", CreateZipFile).Methods("GET").Name("Generate zip")
+	router.HandleFunc("/modules/{version}", modulesFor).Methods("GET").Name("Get modules compatible with Spring Boot version")
 	router.HandleFunc("/config", PopulateJSONConfig).Methods("GET").Name("Config")
 
 	log.Infof("Starting Spring Boot Generator Server on port %s - Version %s (%s)", port, version, gitcommit)
@@ -94,9 +95,29 @@ func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []
 	return convertArrayToStruct(params[k])
 }
 
+func modulesFor(w http.ResponseWriter, r *http.Request) {
+	setCORSHeaders(r, w)
+	vars := mux.Vars(r)
+	version := vars["version"]
+	modules := []scaffold.Module{}
+	if len(version) != 0 {
+		config := scaffold.GetConfig()
+		modules = config.GetModulesCompatibleWith(version)
+	}
+	jsonStr, _ := json.Marshal(modules)
+	fmt.Fprintf(w, "%s", jsonStr)
+}
+
 //Process the HTTP Get request to return as JSON message the Generator config
 func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
-	// Set CORS Headers
+	setCORSHeaders(r, w)
+	w.Header().Set("Content-Type", "application/json")
+	jsonStr, _ := json.Marshal(scaffold.GetConfig())
+	fmt.Fprintf(w, "%s", jsonStr)
+}
+
+// setCORSHeaders sets CORS Headers on the response if the Origin header exists on the request
+func setCORSHeaders(r *http.Request, w http.ResponseWriter) {
 	if origin := r.Header.Get("Origin"); origin != "" {
 		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -105,9 +126,6 @@ func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Headers",
 			"Accept, Content-Type, Content-Length, Accept-Encoding, X-Requested-With, remember-me, X-CSRF-Token, Authorization")
 	}
-	w.Header().Set("Content-Type", "application/json")
-	jsonStr, _ := json.Marshal(scaffold.GetConfig())
-	fmt.Fprintf(w, "%s", jsonStr)
 }
 
 //Process the HTTP GET Raw Request and populate a zip file as HTTP Response
@@ -147,7 +165,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	// If the snowdropbom version is not defined BUT only the Spring Boot Version, then get the corresponding
 	// BOM version using the version of the Spring Boot selected from the Config Bom's Array
 	if getUrlVal(r, "snowdropbom") == "" && getUrlVal(r, "springbootversion") != "" {
-		p.SnowdropBomVersion = scaffold.GetCorrespondingSnowDropBom(p.SpringBootVersion)
+		p.SnowdropBomVersion = scaffold.GetConfig().GetCorrespondingSnowDropBom(p.SpringBootVersion)
 	}
 
 	// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
