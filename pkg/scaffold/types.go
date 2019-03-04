@@ -73,25 +73,27 @@ type Module struct {
 }
 
 func (m Module) IsAvailableFor(bomVersion string) bool {
-	if len(m.Availability) != 0 {
-		// remove .RELEASE from BOM version if present since it's not part of semantic versioning
-		i := strings.Index(bomVersion, releaseSuffix)
-		if i > 0 {
-			bomVersion = bomVersion[:i]
-			logrus.Info(bomVersion)
-		}
+	// remove .RELEASE from BOM version if present since it's not part of semantic versioning
+	i := strings.Index(bomVersion, releaseSuffix)
+	if i > 0 {
+		bomVersion = bomVersion[:i]
+		logrus.Info(bomVersion)
+	}
 
+	// if provided version is incorrect, module should not be available
+	sbVersion, err := semver.Parse(bomVersion)
+	if err != nil {
+		logrus.Warningf("Invalid input version %s, marking module as unavailable: %v", bomVersion, err)
+		return false
+	}
+
+	if len(m.Availability) != 0 {
 		versionRange, err := semver.ParseRange(m.Availability)
 		if err != nil {
 			logrus.Warningf("Invalid availability range %s, marking module as unavailable: %v", m.Availability, err)
 			return false
 		}
 
-		sbVersion, err := semver.Parse(bomVersion)
-		if err != nil {
-			logrus.Warningf("Invalid input version %s, marking module as available: %v", bomVersion, err)
-			return true
-		}
 		return versionRange(sbVersion)
 	}
 	return true

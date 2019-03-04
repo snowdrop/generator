@@ -27,12 +27,12 @@ func TestIsModuleAvailable(t *testing.T) {
 			},
 			expected: true,
 		}, {
-			name:    "Module should be available if there is no availability, invalid version",
+			name:    "Module should not be available if given an invalid version",
 			version: "2.1EASE",
 			module: Module{
 				Name: "foo",
 			},
-			expected: true,
+			expected: false,
 		}, {
 			name:    "Module should not be available if availability is incorrect",
 			version: "2.1.2",
@@ -70,7 +70,7 @@ func TestIsModuleAvailable(t *testing.T) {
 
 	for _, tt := range tests {
 		if tt.expected != tt.module.IsAvailableFor(tt.version) {
-			t.Fail()
+			t.Errorf("'%s' failed", tt.name)
 		}
 	}
 }
@@ -158,13 +158,26 @@ func TestKeepModulesCompatibleWith(t *testing.T) {
 					Name: "bar",
 				},
 			},
+		}, {
+			name:    "Wrong version, no modules should be available",
+			version: "foo",
+			input: []Module{
+				{
+					Name:         "foo",
+					Availability: "2.1.2.RELEASE",
+				},
+				{
+					Name: "bar",
+				},
+			},
+			expected: []Module{},
 		},
 	}
 
 	for _, tt := range tests {
 		actual := keepModulesCompatibleWith(tt.input, tt.version)
 		if !reflect.DeepEqual(tt.expected, actual) {
-			t.Errorf("expected %v, got %v", tt.expected, actual)
+			t.Errorf("'%s' failed: expected %v, got %v", tt.name, tt.expected, actual)
 		}
 	}
 }
