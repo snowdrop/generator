@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -75,24 +76,12 @@ func Run(version string, gitcommit string) {
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
-func getUrlVal(r *http.Request, k string) string {
-	return r.URL.Query().Get(k)
-}
-
-func getArrayVal(r *http.Request, k string, params map[string][]string) []string {
-	return params[k]
-}
-
-func convertArrayToStruct(modules []string) []scaffold.Module {
+func asModuleArray(modules []string) []scaffold.Module {
 	mod := make([]scaffold.Module, 0)
 	for _, e := range modules {
 		mod = append(mod, scaffold.Module{Name: e})
 	}
 	return mod
-}
-
-func getArrayModuleVal(r *http.Request, k string, params map[string][]string) []scaffold.Module {
-	return convertArrayToStruct(params[k])
 }
 
 func modulesFor(w http.ResponseWriter, r *http.Request) {
@@ -134,44 +123,52 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	params, _ := url.ParseQuery(r.URL.RawQuery)
 	p := scaffold.GetDefaultProject()
 
-	if getUrlVal(r, "template") != "" {
-		p.Template = getUrlVal(r, "template")
-	}
-	if getUrlVal(r, "groupid") != "" {
-		p.GroupId = getUrlVal(r, "groupid")
-	}
-	if getUrlVal(r, "artifactid") != "" {
-		p.ArtifactId = getUrlVal(r, "artifactid")
-	}
-	if getUrlVal(r, "version") != "" {
-		p.Version = getUrlVal(r, "version")
-	}
-	if getUrlVal(r, "packagename") != "" {
-		p.PackageName = getUrlVal(r, "packagename")
-	}
-	if len(getArrayModuleVal(r, "module", params)) > 0 {
-		p.Modules = getArrayModuleVal(r, "module", params)
-	}
-	if getUrlVal(r, "snowdropbom") != "" {
-		p.SnowdropBomVersion = getUrlVal(r, "snowdropbom")
-	}
-	if getUrlVal(r, "springbootversion") != "" {
-		p.SpringBootVersion = getUrlVal(r, "springbootversion")
-	}
-	if getUrlVal(r, "outdir") != "" {
-		p.OutDir = getUrlVal(r, "outdir")
+	p.SpringBootVersion = params.Get("springbootversion")
+	p.SnowdropBomVersion = params.Get("snowdropbom")
+
+	if len(p.SpringBootVersion) == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Must provide at least Spring Boot version"))
+		return
 	}
 
-	// If the snowdropbom version is not defined BUT only the Spring Boot Version, then get the corresponding
+	// retrieve bom information associated with the Spring Boot version
+	bom := scaffold.GetConfig().GetCorrespondingSnowDropBom(p.SpringBootVersion)
+
+	// If the snowdrop bom version is not defined BUT only the Spring Boot Version, then get the corresponding
 	// BOM version using the version of the Spring Boot selected from the Config Bom's Array
-	if getUrlVal(r, "snowdropbom") == "" && getUrlVal(r, "springbootversion") != "" {
-		p.SnowdropBomVersion = scaffold.GetConfig().GetCorrespondingSnowDropBom(p.SpringBootVersion)
+	if len(p.SnowdropBomVersion) == 0 {
+		p.SnowdropBomVersion = bom.Snowdrop
+	}
+
+	b, err := strconv.ParseBool(params.Get("supported"))
+	if err == nil {
+		p.UseSupported = b
+	}
+	if p.UseSupported {
+		if len(bom.Supported) == 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(fmt.Sprintf("%s is not a supported Spring Boot version", p.SpringBootVersion)))
+			return
+		}
+		p.SnowdropBomVersion = bom.Supported
+	}
+
+	p.Template = params.Get("template")
+	p.GroupId = params.Get("groupid")
+	p.ArtifactId = params.Get("artifactid")
+	p.Version = params.Get("version")
+	p.PackageName = params.Get("packagename")
+	p.OutDir = params.Get("outdir")
+
+	if len(params["module"]) > 0 {
+		p.Modules = asModuleArray(params["module"])
 	}
 
 	// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
 	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
 	// which are incompatible or not fully tested with the template proposed
-	if len(getArrayVal(r, "module", params)) > 0 && p.Template != "custom" {
+	if len(params["module"]) > 0 && p.Template != "custom" {
 		p.Template = "custom"
 	}
 

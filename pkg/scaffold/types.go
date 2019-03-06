@@ -18,6 +18,7 @@ type Project struct {
 
 	SnowdropBomVersion string `yaml:"snowdropbom"       json:"snowdropbom"`
 	SpringBootVersion  string `yaml:"springbootversion" json:"springbootversion"`
+	UseSupported       bool
 
 	Modules         []Module `yaml:"modules"           json:"modules"`
 	Dependencies    []Dependency
@@ -33,30 +34,27 @@ type Config struct {
 	ExtraProperties ExtraProperties `yaml:"extraProperties"      json:"extraProperties"`
 }
 
-func (c *Config) GetCorrespondingSnowDropBom(version string) string {
-	logrus.Debugf("Version to search for %s", version)
+func (c *Config) GetCorrespondingSnowDropBom(version string) Bom {
 	for _, bom := range c.Boms {
-		logrus.Debugf("Bom is %v", bom)
 		if bom.Community == version {
-			logrus.Debugf("Matching for %s and %s", bom.Community, bom.Snowdrop)
-			return bom.Snowdrop
+			return bom
 		}
 	}
-	return ""
+	return Bom{}
 }
 
-func (c *Config) IsBOMVersionSupported(version string) bool {
+func (c *Config) doesBOMExistFor(version string) bool {
 	// Add .RELEASE if it's not present since it's expected in the configuration
 	i := strings.Index(version, releaseSuffix)
 	if i < 0 {
 		version = version + releaseSuffix
 	}
 
-	return len(c.GetCorrespondingSnowDropBom(version)) != 0
+	return c.GetCorrespondingSnowDropBom(version).Community == version
 }
 
 func (c *Config) GetModulesCompatibleWith(version string) []Module {
-	if c.IsBOMVersionSupported(version) {
+	if c.doesBOMExistFor(version) {
 		return keepModulesCompatibleWith(c.Modules, version)
 	}
 	return []Module{}
