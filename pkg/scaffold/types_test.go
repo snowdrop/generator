@@ -5,6 +5,24 @@ import (
 	"testing"
 )
 
+func TestConfig_GetDefaultBom(t *testing.T) {
+	config := &Config{
+		Boms: []Bom{
+			{
+				Community: "foo",
+				Default:   true,
+			},
+			{
+				Community: "bar",
+			},
+		},
+	}
+
+	if config.GetDefaultBom().Community != config.Boms[0].Community {
+		t.Fail()
+	}
+}
+
 func TestIsModuleAvailable(t *testing.T) {
 	tests := []struct {
 		name     string
