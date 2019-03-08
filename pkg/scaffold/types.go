@@ -34,6 +34,16 @@ type Config struct {
 	ExtraProperties ExtraProperties `yaml:"extraProperties"      json:"extraProperties"`
 }
 
+func (c *Config) GetDefaultBom() Bom {
+	for _, bom := range c.Boms {
+		if bom.Default {
+			return bom
+		}
+	}
+
+	return Bom{}
+}
+
 func (c *Config) GetCorrespondingSnowDropBom(version string) Bom {
 	for _, bom := range c.Boms {
 		if bom.Community == version {

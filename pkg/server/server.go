@@ -126,14 +126,20 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	p.SpringBootVersion = params.Get("springbootversion")
 	p.SnowdropBomVersion = params.Get("snowdropbom")
 
+	config := scaffold.GetConfig()
 	if len(p.SpringBootVersion) == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Must provide at least Spring Boot version"))
-		return
+		// if we didn't get
+		defaultSBVersion := config.GetDefaultBom().Community
+		if len(defaultSBVersion) == 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Must provide at least Spring Boot version"))
+			return
+		}
+		p.SpringBootVersion = defaultSBVersion
 	}
 
 	// retrieve bom information associated with the Spring Boot version
-	bom := scaffold.GetConfig().GetCorrespondingSnowDropBom(p.SpringBootVersion)
+	bom := config.GetCorrespondingSnowDropBom(p.SpringBootVersion)
 
 	// If the snowdrop bom version is not defined BUT only the Spring Boot Version, then get the corresponding
 	// BOM version using the version of the Spring Boot selected from the Config Bom's Array
