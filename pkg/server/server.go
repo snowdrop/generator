@@ -219,7 +219,9 @@ func handleZip(w http.ResponseWriter, tmpdir string) {
 	w.Header().Set("Content-Type", "application/zip")
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", zipFilename))
 
-	errZip := zipFiles(w, tmpdir)
+	fullPathZipDir := filepath.Join(currentDir, tmpdir)
+	log.Info("Zip file path : ", fullPathZipDir)
+	errZip := recursiveZip(w, fullPathZipDir)
 	if errZip != nil {
 		respondWith(errZip.Error(), http.StatusInternalServerError, w)
 	}
@@ -227,17 +229,6 @@ func handleZip(w http.ResponseWriter, tmpdir string) {
 
 // Get Files generated from templates under _temp directory and
 // them recursively to the file to be zipped
-func zipFiles(w http.ResponseWriter, tmpdir string) error {
-	fullPathZipDir := strings.Join([]string{currentDir, tmpdir}, "/")
-	log.Info("Zip file path : ", fullPathZipDir)
-	err := recursiveZip(w, fullPathZipDir)
-	if err != nil {
-		log.Error(err)
-		return err
-	}
-	return nil
-}
-
 func recursiveZip(w http.ResponseWriter, destinationPath string) error {
 	zipWriter := zip.NewWriter(w)
 	defer zipWriter.Close()
