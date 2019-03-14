@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -15,14 +17,106 @@ import (
 )
 
 const (
-	configYamlName = "generator.yaml"
-	dummyDirName   = "dummy"
+	configYamlName      = "generator.yaml"
+	dummyDirName        = "dummy"
+	allVersionsSelector = "_all_"
 )
 
 var (
-	config    *Config
-	templates = make(map[string]*template.Template)
+	config *Config
+
+	// Store template in map by name then version. If there are no version for a given template name, then the template applies
+	// to all versions.
+	templates = make(templateRegistry)
+
+	simplifiedVersionRegexp = regexp.MustCompile("^(\\d+.\\d+.\\d+)")
 )
+
+type versionRegistry map[string][]*template.Template
+type templateRegistry map[string]versionRegistry
+
+func (vr versionRegistry) getTemplatesFor(version string) []*template.Template {
+	return vr[version]
+}
+
+func (vr versionRegistry) addTemplate(version, path string) error {
+	templates := vr.getTemplatesFor(version)
+	if templates == nil {
+		templates = make([]*template.Template, 0, 20)
+	}
+
+	// Create a new Template using the File name as key and add it to the array
+	t := template.New(path)
+
+	// Read Template's content
+	data, err := vfsutil.ReadFile(tmpl.Assets, path)
+	if err != nil {
+		return err
+	}
+	t, err = t.Parse(bytes.NewBuffer(data).String())
+	if err != nil {
+		return err
+	}
+
+	templates = append(templates, t)
+	vr[version] = templates
+
+	return nil
+}
+
+func (tr templateRegistry) getTemplatesFor(name, version string) []*template.Template {
+	log.Infof("Retrieving templates for project template '%s' with version '%s'", name, version)
+
+	// extract simplified Spring Boot version from project
+	simplifiedVersion := allVersionsSelector
+	matches := simplifiedVersionRegexp.FindStringSubmatch(version)
+	if matches != nil {
+		simplifiedVersion = matches[1]
+	}
+
+	// first check if we have templates for this version
+	if versions, ok := tr[name]; ok {
+		templates := versions.getTemplatesFor(simplifiedVersion)
+		if templates == nil {
+			log.Infof("No templates were found for '%s' (converted to simplified version: '%s'), attempting default version", version, simplifiedVersion)
+			templates = versions.getTemplatesFor(allVersionsSelector)
+		}
+
+		return templates
+	}
+
+	return nil
+}
+
+func (tr templateRegistry) addTemplate(path string) error {
+	// first, extract name and version from path
+	name, version := extractNameAndVersion(path)
+
+	// check if we already have a versions map for this template or create it otherwise
+	versions, ok := templates[name]
+	if !ok {
+		versions = make(versionRegistry)
+		templates[name] = versions
+	}
+
+	log.Infof("Adding template %s, version: %s, path: %s", name, version, path)
+	return versions.addTemplate(version, path)
+}
+
+func extractNameAndVersion(path string) (name, version string) {
+	split := strings.Split(path, string(filepath.Separator))
+	name = split[1] // split[0] is empty because path starts with a separator
+	potentialVersion := split[2]
+	// check if the second hierarchy level match a version
+	if simplifiedVersionRegexp.MatchString(potentialVersion) {
+		version = potentialVersion
+	} else {
+		// otherwise, use the all version selector as version
+		version = allVersionsSelector
+	}
+
+	return name, version
+}
 
 func GetConfig() *Config {
 	return config
@@ -73,7 +167,6 @@ func ParseGeneratorConfigFile(pathConfigMap string) {
 }
 
 func CollectVfsTemplates() {
-
 	walkFn := func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
 			log.Printf("can't stat file %s: %v\n", path, err)
@@ -84,22 +177,7 @@ func CollectVfsTemplates() {
 			return nil
 		}
 
-		log.Debug("Path of the file to be added as template : " + path)
-
-		// Create a new Template using the File name as key and add it to the array
-		t := template.New(path)
-
-		// Read Template's content
-		data, err := vfsutil.ReadFile(tmpl.Assets, path)
-		if err != nil {
-			return err
-		}
-		t, err = t.Parse(bytes.NewBuffer(data).String())
-		if err != nil {
-			return err
-		}
-		templates[path] = t
-		return nil
+		return templates.addTemplate(path)
 	}
 
 	errW := vfsutil.Walk(tmpl.Assets, "/", walkFn)
@@ -109,64 +187,64 @@ func CollectVfsTemplates() {
 }
 
 func ParseSelectedTemplate(project *Project, dir string, outDir string) {
+	templatesFor := templates.getTemplatesFor(project.Template, project.SpringBootVersion)
+	if templatesFor == nil {
+		log.Infof("No such template %s", project.Template)
+		return
+	}
 
-	// Pickup from the Map of the Templates, the files corresponding to the type selected by the user
-	for key, t := range templates {
-		if strings.HasPrefix(key, "/"+project.Template) {
+	for _, t := range templatesFor {
+		log.Infof("Processed template : %s", t.Name())
+		var b bytes.Buffer
 
-			log.Infof("Processed template : %s", t.Name())
-			var b bytes.Buffer
-
-			// Enrich project with dependencies if they exist
-			if strings.Contains(t.Name(), "pom.xml") {
-				if project.Modules != nil {
-					addDependenciesToModule(config.Modules, project)
-				}
+		// Enrich project with dependencies if they exist
+		if strings.Contains(t.Name(), "pom.xml") {
+			if project.Modules != nil {
+				addDependenciesToModule(config.Modules, project)
 			}
+		}
 
-			// Remove duplicate's dependencies from modules
-			project.Dependencies = RemoveDuplicates(project.Modules)
+		// Remove duplicate's dependencies from modules
+		project.Dependencies = RemoveDuplicates(project.Modules)
 
-			if log.GetLevel() == log.InfoLevel {
-				for _, dep := range project.Dependencies {
-					log.Infof("Dependency : %s-%s-%s", dep.GroupId, dep.ArtifactId, dep.Version)
-				}
+		if log.GetLevel() == log.InfoLevel {
+			for _, dep := range project.Dependencies {
+				log.Infof("Dependency : %s-%s-%s", dep.GroupId, dep.ArtifactId, dep.Version)
 			}
+		}
 
-			// Use template to generate the content
-			err := t.Execute(&b, project)
-			if err != nil {
-				log.Error(err.Error())
-			}
+		// Use template to generate the content
+		err := t.Execute(&b, project)
+		if err != nil {
+			log.Error(err.Error())
+		}
 
-			// Convert Path
-			tFileName := t.Name()
-			pathF := strings.Join([]string{dir, outDir, path.Dir(tFileName)}, "/")
-			log.Debugf("## Path : %s", pathF)
-			pathConverted := strings.Replace(pathF, dummyDirName, convertPackageToPath(project.PackageName), -1)
-			log.Debugf("Path converted: %s", pathF)
+		// Convert Path
+		tFileName := t.Name()
+		pathF := strings.Join([]string{dir, outDir, path.Dir(tFileName)}, "/")
+		log.Debugf("## Path : %s", pathF)
+		pathConverted := strings.Replace(pathF, dummyDirName, convertPackageToPath(project.PackageName), -1)
+		log.Debugf("Path converted: %s", pathF)
 
-			// Convert FileName
-			fileName := strings.Join([]string{dir, outDir, tFileName}, "/")
-			log.Debugf("## File name : %s", fileName)
-			fileNameConverted := strings.Replace(fileName, dummyDirName, convertPackageToPath(project.PackageName), -1)
-			log.Debugf("File name converted : %s", fileNameConverted)
+		// Convert FileName
+		fileName := strings.Join([]string{dir, outDir, tFileName}, "/")
+		log.Debugf("## File name : %s", fileName)
+		fileNameConverted := strings.Replace(fileName, dummyDirName, convertPackageToPath(project.PackageName), -1)
+		log.Debugf("File name converted : %s", fileNameConverted)
 
-			// Create missing folders
-			log.Debugf("Path to generated file : %s", pathConverted)
-			os.MkdirAll(pathConverted, os.ModePerm)
+		// Create missing folders
+		log.Debugf("Path to generated file : %s", pathConverted)
+		os.MkdirAll(pathConverted, os.ModePerm)
 
-			// Content generated
-			log.Debugf("Content generated : %s", b.Bytes())
+		// Content generated
+		log.Debugf("Content generated : %s", b.Bytes())
 
-			err = ioutil.WriteFile(fileNameConverted, b.Bytes(), 0644)
-			if err != nil {
-				log.Error(err.Error())
-			}
-
+		err = ioutil.WriteFile(fileNameConverted, b.Bytes(), 0644)
+		if err != nil {
+			log.Error(err.Error())
 		}
 	}
-	log.Infof("Project enriched %+v ", project)
+	log.Infof("Enriched project %+v", project)
 }
 
 func RemoveDuplicates(mods []Module) []Dependency {
