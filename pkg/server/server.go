@@ -240,7 +240,7 @@ func recursiveZip(destinationPath string, version string, w http.ResponseWriter)
 		if err != nil {
 			return err
 		}
-		relPath := strings.TrimPrefix(filePath, filepath.Dir(destinationPath))
+		relPath := strings.TrimPrefix(filePath, destinationPath)
 		relPath = strings.TrimPrefix(relPath, "/")
 
 		if len(version) > 0 {
