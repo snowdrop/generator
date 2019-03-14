@@ -20,11 +20,8 @@ const (
 )
 
 var (
-	templateFiles       []string
-	config              *Config
-	p                   *Project
-	assetsJavaTemplates = tmpl.Assets
-	templates           = make(map[string]template.Template)
+	config    *Config
+	templates = make(map[string]*template.Template)
 )
 
 func GetConfig() *Config {
@@ -80,7 +77,7 @@ func CollectVfsTemplates() {
 	walkFn := func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
 			log.Printf("can't stat file %s: %v\n", path, err)
-			return nil
+			return err
 		}
 
 		if fi.IsDir() {
@@ -88,31 +85,26 @@ func CollectVfsTemplates() {
 		}
 
 		log.Debug("Path of the file to be added as template : " + path)
-		templateFiles = append(templateFiles, path)
-		return nil
-	}
-
-	errW := vfsutil.Walk(assetsJavaTemplates, "/", walkFn)
-	if errW != nil {
-		panic(errW)
-	}
-
-	for i := range templateFiles {
-		log.Info("File template : " + templateFiles[i])
 
 		// Create a new Template using the File name as key and add it to the array
-		t := template.New(templateFiles[i])
+		t := template.New(path)
 
 		// Read Template's content
-		data, err := vfsutil.ReadFile(assetsJavaTemplates, templateFiles[i])
+		data, err := vfsutil.ReadFile(tmpl.Assets, path)
 		if err != nil {
-			log.Error(err)
+			return err
 		}
 		t, err = t.Parse(bytes.NewBuffer(data).String())
 		if err != nil {
-			log.Error(err)
+			return err
 		}
-		templates[templateFiles[i]] = *t
+		templates[path] = t
+		return nil
+	}
+
+	errW := vfsutil.Walk(tmpl.Assets, "/", walkFn)
+	if errW != nil {
+		panic(errW)
 	}
 }
 
@@ -122,7 +114,7 @@ func ParseTemplateSelected(templateSelected string, dir string, outDir string, p
 	for key, t := range templates {
 		if strings.HasPrefix(key, "/"+templateSelected) {
 
-			log.Infof("Template processed : %s", t.Name())
+			log.Infof("Processed template : %s", t.Name())
 			var b bytes.Buffer
 
 			// Enrich project with dependencies if they exist
