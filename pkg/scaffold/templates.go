@@ -106,7 +106,7 @@ func (tr templateRegistry) addTemplate(path string) error {
 		templates[name] = versions
 	}
 
-	log.Infof("Adding template %s, version: %s, path: %s", name, version, path)
+	log.Debugf("Adding template %s, version: %s, path: %s", name, version, path)
 	return versions.addTemplate(version, path)
 }
 
