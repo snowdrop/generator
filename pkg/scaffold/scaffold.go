@@ -2,6 +2,7 @@ package scaffold
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -186,11 +187,10 @@ func CollectVfsTemplates() {
 	}
 }
 
-func ParseSelectedTemplate(project *Project, dir string, outDir string) {
+func ParseSelectedTemplate(project *Project, dir string, outDir string) error {
 	templatesFor := templates.getTemplatesFor(project.Template, project.SpringBootVersion)
 	if templatesFor == nil {
-		log.Infof("No such template %s", project.Template)
-		return
+		return fmt.Errorf("'%s' template is not supported for '%s' Spring Boot version", project.Template, project.SpringBootVersion)
 	}
 
 	for _, t := range templatesFor {
@@ -245,6 +245,7 @@ func ParseSelectedTemplate(project *Project, dir string, outDir string) {
 		}
 	}
 	log.Infof("Enriched project %+v", project)
+	return nil
 }
 
 func RemoveDuplicates(mods []Module) []Dependency {

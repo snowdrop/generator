@@ -186,7 +186,15 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	log.Infof("Temp dir %s", tmpdir)
 
 	// Parse the java project's template selected and enrich the scaffold.Project with the dependencies (if they are)
-	scaffold.ParseSelectedTemplate(p, currentDir, tmpdir)
+	err = scaffold.ParseSelectedTemplate(p, currentDir, tmpdir)
+	if err != nil {
+		msg := err.Error()
+		log.Info(msg)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(msg))
+		return
+	}
+
 	log.Info("Project generated")
 
 	zipDir := strings.Join([]string{tmpdir, p.Template, "/"}, "/")
