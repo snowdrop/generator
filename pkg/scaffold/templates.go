@@ -25,7 +25,7 @@ var (
 	// to all versions.
 	templates = make(templateRegistry)
 
-	simplifiedVersionRegexp = regexp.MustCompile("^(\\d+.\\d+.\\d+)")
+	simplifiedVersionRegexp = regexp.MustCompile("^((\\d+.\\d+)(.\\d+)?)")
 )
 
 type versionRegistry map[string][]*template.Template
@@ -65,19 +65,28 @@ func (tr templateRegistry) getTemplatesFor(name, version string) ([]*template.Te
 
 	// extract simplified Spring Boot version from project
 	simplifiedVersion := allVersionsSelector
+	majorVersion := ""
 	matches := simplifiedVersionRegexp.FindStringSubmatch(version)
 	if matches != nil {
 		simplifiedVersion = matches[1]
+		majorVersion = matches[2]
 	}
 
 	// first check if we have templates for this version
 	effectiveVersion := simplifiedVersion
 	if versions, ok := tr[name]; ok {
 		templates := versions.getTemplatesFor(simplifiedVersion)
+
 		if templates == nil {
-			log.Infof("No templates were found for '%s' (converted to simplified version: '%s'), attempting default version", version, simplifiedVersion)
-			templates = versions.getTemplatesFor(allVersionsSelector)
-			effectiveVersion = "" // if we used the default version selector, return empty string
+			log.Infof("No templates were found for exact version '%s' (converted to simplified version: '%s'), attempting major version '%s'", version, simplifiedVersion, majorVersion)
+			templates = versions.getTemplatesFor(majorVersion)
+			effectiveVersion = majorVersion
+
+			if templates == nil {
+				log.Infof("No templates were found for major version '%s', attempting default version", majorVersion)
+				templates = versions.getTemplatesFor(allVersionsSelector)
+				effectiveVersion = "" // if we used the default version selector, return empty string
+			}
 		}
 
 		return templates, effectiveVersion
