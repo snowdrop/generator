@@ -108,7 +108,7 @@ func CollectVfsTemplates() {
 	}
 }
 
-func ParseTemplateSelected(templateSelected string, dir string, outDir string, project *Project) {
+func ParseSelectedTemplate(templateSelected string, dir string, outDir string, project *Project) {
 
 	// Pickup from the Map of the Templates, the files corresponding to the type selected by the user
 	for key, t := range templates {
