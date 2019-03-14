@@ -78,9 +78,19 @@ func Run(version string, gitcommit string) {
 
 func asModuleArray(modules []string) []scaffold.Module {
 	mod := make([]scaffold.Module, 0)
+	hasSeenCore := false
 	for _, e := range modules {
+		if "core" == e {
+			hasSeenCore = true
+		}
 		mod = append(mod, scaffold.Module{Name: e})
 	}
+
+	// if we don't have core in the modules, add it because otherwise the apps won't work
+	if !hasSeenCore {
+		mod = append(mod, scaffold.Module{Name: "core"})
+	}
+
 	return mod
 }
 
