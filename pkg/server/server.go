@@ -131,8 +131,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 		// if we didn't get
 		defaultSBVersion := config.GetDefaultBom().Community
 		if len(defaultSBVersion) == 0 {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("Must provide at least Spring Boot version"))
+			respondWith("Must provide at least Spring Boot version", http.StatusBadRequest, w)
 			return
 		}
 		p.SpringBootVersion = defaultSBVersion
@@ -153,8 +152,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	}
 	if p.UseSupported {
 		if len(bom.Supported) == 0 {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(fmt.Sprintf("%s is not a supported Spring Boot version", p.SpringBootVersion)))
+			respondWith(fmt.Sprintf("%s is not a supported Spring Boot version", p.SpringBootVersion), http.StatusBadRequest, w)
 			return
 		}
 		p.SnowdropBomVersion = bom.Supported
@@ -188,10 +186,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	// Parse the java project's template selected and enrich the scaffold.Project with the dependencies (if they are)
 	err = scaffold.ParseSelectedTemplate(p, currentDir, tmpdir)
 	if err != nil {
-		msg := err.Error()
-		log.Info(msg)
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(msg))
+		respondWith(err.Error(), http.StatusNotFound, w)
 		return
 	}
 
@@ -203,6 +198,12 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 
 	// Remove temp dir where project has been generated
 	removeTempDir(tmpdir)
+}
+
+func respondWith(msg string, status int, w http.ResponseWriter) {
+	log.Info(msg)
+	w.WriteHeader(status)
+	w.Write([]byte(msg))
 }
 
 func removeTempDir(tmpdir string) {
