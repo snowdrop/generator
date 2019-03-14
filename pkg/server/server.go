@@ -221,7 +221,7 @@ func handleZip(w http.ResponseWriter, tmpdir string) {
 
 	errZip := zipFiles(w, tmpdir)
 	if errZip != nil {
-		log.Fatal(errZip)
+		respondWith(errZip.Error(), http.StatusInternalServerError, w)
 	}
 }
 
