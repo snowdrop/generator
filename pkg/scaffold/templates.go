@@ -60,7 +60,7 @@ func (vr versionRegistry) addTemplate(version, path string) error {
 	return nil
 }
 
-func (tr templateRegistry) getTemplatesFor(name, version string) []*template.Template {
+func (tr templateRegistry) getTemplatesFor(name, version string) ([]*template.Template, string) {
 	log.Infof("Retrieving templates for project template '%s' with version '%s'", name, version)
 
 	// extract simplified Spring Boot version from project
@@ -71,17 +71,19 @@ func (tr templateRegistry) getTemplatesFor(name, version string) []*template.Tem
 	}
 
 	// first check if we have templates for this version
+	effectiveVersion := simplifiedVersion
 	if versions, ok := tr[name]; ok {
 		templates := versions.getTemplatesFor(simplifiedVersion)
 		if templates == nil {
 			log.Infof("No templates were found for '%s' (converted to simplified version: '%s'), attempting default version", version, simplifiedVersion)
 			templates = versions.getTemplatesFor(allVersionsSelector)
+			effectiveVersion = "" // if we used the default version selector, return empty string
 		}
 
-		return templates
+		return templates, effectiveVersion
 	}
 
-	return nil
+	return nil, ""
 }
 
 func (tr templateRegistry) addTemplate(path string) error {
@@ -134,10 +136,10 @@ func CollectVfsTemplates() {
 	}
 }
 
-func ParseSelectedTemplate(project *Project, dir string, outDir string) error {
-	templatesFor := templates.getTemplatesFor(project.Template, project.SpringBootVersion)
+func ParseSelectedTemplate(project *Project, dir string, outDir string) (string, error) {
+	templatesFor, effectiveVersion := templates.getTemplatesFor(project.Template, project.SpringBootVersion)
 	if templatesFor == nil {
-		return fmt.Errorf("'%s' template is not supported for '%s' Spring Boot version", project.Template, project.SpringBootVersion)
+		return effectiveVersion, fmt.Errorf("'%s' template is not supported for '%s' Spring Boot version", project.Template, project.SpringBootVersion)
 	}
 
 	for _, t := range templatesFor {
@@ -192,7 +194,7 @@ func ParseSelectedTemplate(project *Project, dir string, outDir string) error {
 		}
 	}
 	log.Infof("Enriched project %+v", project)
-	return nil
+	return effectiveVersion, nil
 }
 
 func RemoveDuplicates(mods []Module) []Dependency {

@@ -184,7 +184,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	log.Infof("Temp dir %s", tmpdir)
 
 	// Parse the java project's template selected and enrich the scaffold.Project with the dependencies (if they are)
-	err = scaffold.ParseSelectedTemplate(p, currentDir, tmpdir)
+	version, err := scaffold.ParseSelectedTemplate(p, currentDir, tmpdir)
 	if err != nil {
 		respondWith(err.Error(), http.StatusNotFound, w)
 		return
@@ -193,7 +193,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	log.Info("Project generated")
 
 	zipDir := filepath.Join(tmpdir, p.Template)
-	handleZip(w, zipDir)
+	handleZip(zipDir, version, w)
 	log.Info("Zip populated")
 
 	// Remove temp dir where project has been generated
@@ -214,14 +214,14 @@ func removeTempDir(tmpdir string) {
 }
 
 // Generate Zip file to be returned as HTTP Response
-func handleZip(w http.ResponseWriter, tmpdir string) {
+func handleZip(tmpdir string, version string, w http.ResponseWriter) {
 	zipFilename := "demo.zip"
 	w.Header().Set("Content-Type", "application/zip")
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", zipFilename))
 
 	fullPathZipDir := filepath.Join(currentDir, tmpdir)
 	log.Info("Zip file path : ", fullPathZipDir)
-	errZip := recursiveZip(w, fullPathZipDir)
+	errZip := recursiveZip(fullPathZipDir, version, w)
 	if errZip != nil {
 		respondWith(errZip.Error(), http.StatusInternalServerError, w)
 	}
@@ -229,7 +229,7 @@ func handleZip(w http.ResponseWriter, tmpdir string) {
 
 // Get Files generated from templates under _temp directory and
 // them recursively to the file to be zipped
-func recursiveZip(w http.ResponseWriter, destinationPath string) error {
+func recursiveZip(destinationPath string, version string, w http.ResponseWriter) error {
 	zipWriter := zip.NewWriter(w)
 	defer zipWriter.Close()
 
@@ -242,6 +242,10 @@ func recursiveZip(w http.ResponseWriter, destinationPath string) error {
 		}
 		relPath := strings.TrimPrefix(filePath, filepath.Dir(destinationPath))
 		relPath = strings.TrimPrefix(relPath, "/")
+
+		if len(version) > 0 {
+			relPath = strings.Replace(relPath, version+"/", "", -1)
+		}
 		log.Debugf("calculated rel path: %s", relPath)
 
 		zipFile, err := zipWriter.Create(relPath)
