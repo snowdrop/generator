@@ -192,7 +192,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 
 	log.Info("Project generated")
 
-	zipDir := strings.Join([]string{tmpdir, p.Template, "/"}, "/")
+	zipDir := filepath.Join(tmpdir, p.Template)
 	handleZip(w, zipDir)
 	log.Info("Zip populated")
 
