@@ -27,6 +27,15 @@ type Project struct {
 	UrlService string `yaml:"urlservice"           json:"urlservice"`
 }
 
+func (p *Project) HasAp4k() bool {
+	for _, mod := range p.Modules {
+		if "ap4k" == mod.Name {
+			return true
+		}
+	}
+	return false
+}
+
 type Config struct {
 	Templates       []Template      `yaml:"templates"    json:"templates"`
 	Boms            []Bom           `yaml:"bomversions"  json:"bomversions"`

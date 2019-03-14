@@ -15,13 +15,19 @@
  */
 package {{.PackageName}};
 
+{{$hasAp4k := .HasAp4k }}
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;{{if $hasAp4k}}
+import io.ap4k.kubernetes.annotation.KubernetesApplication;
+import io.ap4k.openshift.annotation.OpenshiftApplication;
+{{end}}
 
 /**
  * Entry point to the application.
  */
-@SpringBootApplication
+@SpringBootApplication{{if $hasAp4k}}
+@KubernetesApplication
+@OpenshiftApplication{{end}}
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
