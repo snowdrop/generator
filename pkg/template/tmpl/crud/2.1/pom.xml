@@ -86,7 +86,14 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <dependencies>
+  <dependencies>{{ range .Dependencies }}
+    <dependency>
+      <groupId>{{.GroupId}}</groupId>
+      <artifactId>{{.ArtifactId}}</artifactId>{{ if .Version}}
+      <version>{{.Version}}</version>{{ end }}{{ if .Scope }}
+      <scope>{{.Scope}}</scope>{{ end }}
+    </dependency>
+    {{ end }}
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
