@@ -186,8 +186,8 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 		p.Template = "custom"
 	}
 
-	log.Info("Project : ", p)
-	log.Infof("Request received : %s", r.URL)
+	log.Infof("Received request: %s", r.URL)
+	log.Infof("Project: %v+", p)
 
 	// Generate a random temp directory where populated files will be saved
 	tmpdir := strings.Join([]string{tmpDirName, randStringRunes(10)}, "/")
