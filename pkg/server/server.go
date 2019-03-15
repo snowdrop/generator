@@ -175,15 +175,28 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 	p.PackageName = params.Get("packagename")
 	p.OutDir = params.Get("outdir")
 
-	if len(params["module"]) > 0 {
-		p.Modules = asModuleArray(params["module"])
+	modules := params["module"]
+	hasModules := len(modules) > 0
+	if hasModules {
+		p.Modules = asModuleArray(modules)
 	}
 
-	// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
-	// when a user selects a different template. This is because we would like to avoid to populate a project with starters
-	// which are incompatible or not fully tested with the template proposed
-	if len(params["module"]) > 0 && p.Template != "custom" {
-		p.Template = "custom"
+	useAp4k, _ := strconv.ParseBool(params.Get("ap4k"))
+	if useAp4k {
+		// make sure we have ap4k as a dependency
+		p.Modules = append(p.Modules, scaffold.Module{Name: "ap4k"})
+	}
+
+	if hasModules && p.Template != "custom" {
+		if useAp4k {
+			// if we asked to use ap4k, keep the template value but reset the modules to only ap4k to avoid incompatibilities
+			p.Modules = []scaffold.Module{{Name: "ap4k"}}
+		} else {
+			// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
+			// when a user selects a different template. This is because we would like to avoid to populate a project with starters
+			// which are incompatible or not fully tested with the template proposed
+			p.Template = "custom"
+		}
 	}
 
 	log.Infof("Received request: %s", r.URL)
