@@ -22,7 +22,10 @@
     <!-- Load AngularJS -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script type="text/javascript">
-        var app = angular.module("FruitManagement", []);
+        var app = angular.module("FruitManagement", [], function ($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        });
 
         //Controller Part
         app.controller("FruitManagementController", function ($scope, $http) {
