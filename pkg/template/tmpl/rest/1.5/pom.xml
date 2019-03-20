@@ -6,6 +6,7 @@
   <name>Spring Boot - JAX-RS REST Demo</name>
   <description>Spring Boot - JAX-RS REST Demo</description>
 
+  {{$hasAp4k := .HasAp4k}}
   <repositories>
     <repository>
       <id>redhat-early-access</id>
@@ -35,7 +36,7 @@
   <properties>
     <snowdrop-bom.version>{{.SnowdropBomVersion}}</snowdrop-bom.version>
     <spring-boot.version>{{.SpringBootVersion}}</spring-boot.version>
-    <fabric8-maven-plugin.version>{{.ExtraProperties.FmpVersion}}</fabric8-maven-plugin.version>
+    {{if not $hasAp4k}}<fabric8-maven-plugin.version>{{.ExtraProperties.FmpVersion}}</fabric8-maven-plugin.version>{{end}}
   </properties>
 
   <dependencyManagement>
@@ -94,11 +95,13 @@
           <artifactId>spring-boot-maven-plugin</artifactId>
           <version>${spring-boot.version}</version>
         </plugin>
+        {{if not $hasAp4k}}
         <plugin>
           <groupId>io.fabric8</groupId>
           <artifactId>fabric8-maven-plugin</artifactId>
           <version>${fabric8-maven-plugin.version}</version>
         </plugin>
+        {{end}}
       </plugins>
     </pluginManagement>
     <plugins>
@@ -119,6 +122,7 @@
   <profiles>
     <profile>
       <id>openshift</id>
+      {{if not $hasAp4k}}
       <build>
         <plugins>
           <plugin>
@@ -136,6 +140,7 @@
           </plugin>
         </plugins>
       </build>
+      {{end}}
     </profile>
   </profiles>
 </project>

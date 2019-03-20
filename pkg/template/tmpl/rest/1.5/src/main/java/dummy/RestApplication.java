@@ -20,6 +20,7 @@ package {{.PackageName}};
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 {{if $hasAp4k}}
 import io.ap4k.kubernetes.annotation.KubernetesApplication;
+import io.ap4k.openshift.annotation.EnableS2iBuild;
 import io.ap4k.openshift.annotation.OpenshiftApplication;
 {{end}}
 import org.springframework.boot.SpringApplication;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication{{if $hasAp4k}}
 @KubernetesApplication
+@EnableS2iBuild
 @OpenshiftApplication{{end}}
 public class RestApplication {
 

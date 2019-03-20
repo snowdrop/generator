@@ -4,6 +4,7 @@ package {{.PackageName}};
 
 {{if $hasAp4k}}
 import io.ap4k.kubernetes.annotation.KubernetesApplication;
+import io.ap4k.openshift.annotation.EnableS2iBuild;
 import io.ap4k.openshift.annotation.OpenshiftApplication;
 {{end}}
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication{{if $hasAp4k}}
 @KubernetesApplication
+@EnableS2iBuild
 @OpenshiftApplication{{end}}
 public class MvcApplication extends SpringBootServletInitializer {
 
