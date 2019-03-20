@@ -40,7 +40,7 @@ modules:
       - "code generation"
     dependencies:
       - groupid: io.ap4k
-        artifactid: openshift-annotations
+        artifactid: openshift-spring-starter
         version: 0.2.3
       - groupid: io.ap4k
         artifactid: kubernetes-annotations
