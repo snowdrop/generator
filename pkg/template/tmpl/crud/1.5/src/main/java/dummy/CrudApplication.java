@@ -28,7 +28,11 @@ import io.ap4k.openshift.annotation.OpenshiftApplication;
 @SpringBootApplication{{if $hasAp4k}}
 @KubernetesApplication
 @EnableS2iBuild
-@OpenshiftApplication{{end}}
+@OpenshiftApplication(
+        envVars = @Env(name = "JAVA_OPTIONS", value = "-Dspring.profiles.active=openshift"),
+        host = "!!CHANGE_ME!!"
+)
+{{end}}
 public class CrudApplication {
 
     public static void main(String[] args) {
