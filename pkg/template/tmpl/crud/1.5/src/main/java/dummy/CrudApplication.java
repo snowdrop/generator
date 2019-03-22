@@ -31,7 +31,7 @@ import io.ap4k.openshift.annotation.OpenshiftApplication;
 @EnableS2iBuild
 @OpenshiftApplication(
         envVars = @Env(name = "JAVA_OPTIONS", value = "-Dspring.profiles.active=openshift"),
-        host = "!!CHANGE_ME!!"
+        exposeRoute = true
 )
 {{end}}
 public class CrudApplication {

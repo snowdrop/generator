@@ -41,10 +41,10 @@ modules:
     dependencies:
       - groupid: io.ap4k
         artifactid: openshift-spring-starter
-        version: 0.3.0
+        version: 0.3.1
       - groupid: io.ap4k
         artifactid: kubernetes-annotations
-        version: 0.3.0
+        version: 0.3.1
   - name: web
     description: "Web"
     guide_ref: ""
