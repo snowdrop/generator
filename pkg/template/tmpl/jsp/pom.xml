@@ -7,7 +7,7 @@
     <packaging>war</packaging>
     <description>Spring Boot JSP Application packaged as a war</description>
 
-  {{$hasAp4k := .HasAp4k}}
+  {{$hasDekorate := .HasDekorate}}
   <repositories>
     <repository>
       <id>redhat-early-access</id>
@@ -37,7 +37,7 @@
   <properties>
         <snowdrop-bom.version>{{.SnowdropBomVersion}}</snowdrop-bom.version>
         <spring-boot.version>{{.SpringBootVersion}}</spring-boot.version>
-    {{if not $hasAp4k}}<fabric8-maven-plugin.version>{{.ExtraProperties.FmpVersion}}</fabric8-maven-plugin.version>{{end}}
+    {{if not $hasDekorate}}<fabric8-maven-plugin.version>{{.ExtraProperties.FmpVersion}}</fabric8-maven-plugin.version>{{end}}
     </properties>
 
     <dependencyManagement>
@@ -97,7 +97,7 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
                 </plugin>
-              {{if not $hasAp4k}}
+              {{if not $hasDekorate}}
               <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>fabric8-maven-plugin</artifactId>

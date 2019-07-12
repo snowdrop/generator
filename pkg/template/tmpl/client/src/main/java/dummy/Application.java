@@ -15,18 +15,18 @@
  */
 package {{.PackageName}};
 
-{{$hasAp4k := .HasAp4k }}
+{{$hasDekorate := .HasDekorate }}
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;{{if $hasAp4k}}
-import io.ap4k.kubernetes.annotation.KubernetesApplication;
-import io.ap4k.openshift.annotation.EnableS2iBuild;
-import io.ap4k.openshift.annotation.OpenshiftApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;{{if $hasDekorate}}
+import io.dekorate.kubernetes.annotation.KubernetesApplication;
+import io.dekorate.openshift.annotation.EnableS2iBuild;
+import io.dekorate.openshift.annotation.OpenshiftApplication;
 {{end}}
 
 /**
  * Entry point to the application.
  */
-@SpringBootApplication{{if $hasAp4k}}
+@SpringBootApplication{{if $hasDekorate}}
 @KubernetesApplication
 @EnableS2iBuild
 @OpenshiftApplication{{end}}

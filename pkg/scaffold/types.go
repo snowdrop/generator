@@ -27,9 +27,9 @@ type Project struct {
 	UrlService string `yaml:"urlservice"           json:"urlservice"`
 }
 
-func (p *Project) HasAp4k() bool {
+func (p *Project) HasDekorate() bool {
 	for _, mod := range p.Modules {
-		if "ap4k" == mod.Name {
+		if "dekorate" == mod.Name {
 			return true
 		}
 	}

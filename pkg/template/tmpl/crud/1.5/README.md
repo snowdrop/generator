@@ -3,6 +3,6 @@
 - oc apply -f database.yml
 - mvn fabric8:deploy -Popenshift
 
-## To deploy using ap4k:
+## To deploy using dekorate:
 
-- mvn install -Dap4k.deploy=true
+- mvn install -Ddekorate.deploy=true

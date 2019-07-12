@@ -181,16 +181,16 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 		p.Modules = asModuleArray(modules)
 	}
 
-	useAp4k, _ := strconv.ParseBool(params.Get("ap4k"))
-	if useAp4k {
-		// make sure we have ap4k as a dependency
-		p.Modules = append(p.Modules, scaffold.Module{Name: "ap4k"})
+	useDekorate, _ := strconv.ParseBool(params.Get("dekorate"))
+	if useDekorate {
+		// make sure we have dekorate as a dependency
+		p.Modules = append(p.Modules, scaffold.Module{Name: "dekorate"})
 	}
 
 	if hasModules && p.Template != "custom" {
-		if useAp4k {
-			// if we asked to use ap4k, keep the template value but reset the modules to only ap4k to avoid incompatibilities
-			p.Modules = []scaffold.Module{{Name: "ap4k"}}
+		if useDekorate {
+			// if we asked to use dekorate, keep the template value but reset the modules to only dekorate to avoid incompatibilities
+			p.Modules = []scaffold.Module{{Name: "dekorate"}}
 		} else {
 			// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
 			// when a user selects a different template. This is because we would like to avoid to populate a project with starters
