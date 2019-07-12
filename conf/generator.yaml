@@ -46,7 +46,7 @@ modules:
       - "code generation"
     dependencies:
       - groupid: io.dekorate
-        artifactid: kubernetes-spring-starter
+        artifactid: openshift-spring-starter
         version: 0.7.2
       - groupid: io.dekorate
         artifactid: kubernetes-annotations
