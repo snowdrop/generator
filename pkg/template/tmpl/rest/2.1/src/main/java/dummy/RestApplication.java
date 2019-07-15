@@ -20,16 +20,17 @@ package {{.PackageName}};
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 {{if $hasDekorate}}
 import io.dekorate.kubernetes.annotation.KubernetesApplication;
-import io.dekorate.openshift.annotation.EnableS2iBuild;import io.dekorate.openshift.annotation.OpenshiftApplication;
+import io.dekorate.openshift.annotation.OpenshiftApplication;
 {{end}}
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication{{if $hasDekorate}}
+@SpringBootApplication
+{{if $hasDekorate}}
 @KubernetesApplication
-@EnableS2iBuild
-@OpenshiftApplication{{end}}
+@OpenshiftApplication
+{{end}}
 public class RestApplication {
 
     public static void main(String[] args) {

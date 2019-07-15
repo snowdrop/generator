@@ -4,7 +4,6 @@ package {{.PackageName}};
 
 {{if $hasDekorate}}
 import io.dekorate.kubernetes.annotation.KubernetesApplication;
-import io.dekorate.openshift.annotation.EnableS2iBuild;
 import io.dekorate.openshift.annotation.OpenshiftApplication;
 {{end}}
 import org.springframework.boot.SpringApplication;
@@ -12,10 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
-@SpringBootApplication{{if $hasDekorate}}
+@SpringBootApplication
+{{if $hasDekorate}}
 @KubernetesApplication
-@EnableS2iBuild
-@OpenshiftApplication{{end}}
+@OpenshiftApplication
+{{end}}
 public class MvcApplication extends SpringBootServletInitializer {
 
 	@Override
