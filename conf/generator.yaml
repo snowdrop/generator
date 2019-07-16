@@ -49,7 +49,7 @@ modules:
         artifactid: openshift-spring-starter
         version: 0.7.2
       - groupid: io.dekorate
-        artifactid: kubernetes-annotations
+        artifactid: kubernetes-spring-starter
         version: 0.7.2
       - groupid: io.dekorate
         artifactid: component-annotations
