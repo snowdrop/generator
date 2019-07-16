@@ -31,7 +31,7 @@ import io.dekorate.openshift.annotation.OpenshiftApplication;
 @KubernetesApplication
 @OpenshiftApplication(
         envVars = @Env(name = "JAVA_OPTIONS", value = "-Dspring.profiles.active=openshift"),
-        exposeRoute = true
+        expose = true
 )
 {{end}}
 public class CrudApplication {
