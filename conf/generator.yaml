@@ -10,9 +10,9 @@ templates:
   - name: jsp
     description: "A Spring Boot Web JSP/JSTL application."
 bomversions:
-  - community: 1.5.17.RELEASE
-    snowdrop: 1.5.17.SP1
-    supported: 1.5.17.SP1-redhat-00002
+  - community: 1.5.19.RELEASE
+    snowdrop: 1.5.19.SP1
+    supported: 1.5.19.SP1-redhat-00003
   - community: 2.1.2.RELEASE
     snowdrop: 2.1.2.Final
     supported: 2.1.2.Final-redhat-00003
