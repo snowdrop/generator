@@ -25,6 +25,7 @@ bomversions:
     default: true
 extraProperties:
   fmpVersion: 3.5.41
+  dekorateVersion: 0.8.1
 modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"
@@ -47,7 +48,24 @@ modules:
     dependencies:
       - groupid: io.dekorate
         artifactid: halkyon-spring-starter
-        version: 0.8.1
+        version: "${dekorate.version}"
+        scope: compile
+      - groupid: io.dekorate
+        artifactid: dekorate-core
+        scope: compile
+        version: "${dekorate.version}"
+      - groupid: io.dekorate
+        artifactid: dekorate-spring-boot
+        scope: compile
+        version: "${dekorate.version}"
+      - groupid: io.dekorate
+        artifactid: crd-annotations
+        scope: compile
+        version: "${dekorate.version}"
+      - groupid: io.dekorate
+        artifactid: prometheus-annotations
+        scope: compile
+        version: "${dekorate.version}"
   - name: web
     description: "Web"
     guide_ref: ""

@@ -6,7 +6,6 @@
   <name>Spring Boot - Custom Application</name>
   <description>Spring Boot - Custom application</description>
 
-  {{$hasDekorate := .HasDekorate}}
   <repositories>
     <repository>
       <id>redhat-early-access</id>
@@ -36,7 +35,9 @@
   <properties>
     <snowdrop-bom.version>{{.SnowdropBomVersion}}</snowdrop-bom.version>
     <spring-boot.version>{{.SpringBootVersion}}</spring-boot.version>
-    {{if not $hasDekorate}}<fabric8-maven-plugin.version>{{.ExtraProperties.FmpVersion}}</fabric8-maven-plugin.version>{{end}}
+    <dekorate.version>{{.ExtraProperties.DekorateVersion}}</dekorate.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencyManagement>
@@ -87,13 +88,6 @@
           <artifactId>spring-boot-maven-plugin</artifactId>
           <version>${spring-boot.version}</version>
         </plugin>
-        {{if not $hasDekorate}}
-        <plugin>
-          <groupId>io.fabric8</groupId>
-          <artifactId>fabric8-maven-plugin</artifactId>
-          <version>${fabric8-maven-plugin.version}</version>
-        </plugin>
-        {{end}}
       </plugins>
     </pluginManagement>
     <plugins>
@@ -111,28 +105,4 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>openshift</id>
-      {{if not $hasDekorate}}
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>fmp</id>
-                <goals>
-                  <goal>resource</goal>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-      {{end}}
-    </profile>
-  </profiles>
 </project>
