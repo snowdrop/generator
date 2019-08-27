@@ -37,23 +37,17 @@ modules:
       - artifactid: spring-boot-starter-test
         groupid: org.springframework.boot
         scope: test
-  - name: dekorate
-    description: "Dekorate is a collection of Java annotations and processors for generating Kubernetes/OpenShift manifests at compile time"
+  - name: halkyon
+    description: "Halkyon provides a developer-oriented workflow to simplify deploying applications on Kubernetes"
     guide_ref: ""
     tags:
-      - dekorate
+      - halkyon
       - annotations
       - "code generation"
     dependencies:
       - groupid: io.dekorate
-        artifactid: openshift-spring-starter
-        version: 0.7.5
-      - groupid: io.dekorate
-        artifactid: kubernetes-spring-starter
-        version: 0.7.5
-      - groupid: io.dekorate
-        artifactid: component-annotations
-        version: 0.7.5
+        artifactid: halkyon-spring-starter
+        version: 0.8.1
   - name: web
     description: "Web"
     guide_ref: ""

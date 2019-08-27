@@ -104,7 +104,7 @@ func modulesFor(w http.ResponseWriter, r *http.Request) {
 		modules = config.GetModulesCompatibleWith(version)
 	}
 	jsonStr, _ := json.Marshal(modules)
-	fmt.Fprintf(w, "%s", jsonStr)
+	_, _ = fmt.Fprintf(w, "%s", jsonStr)
 }
 
 //Process the HTTP Get request to return as JSON message the Generator config
@@ -112,7 +112,7 @@ func PopulateJSONConfig(w http.ResponseWriter, r *http.Request) {
 	setCORSHeaders(r, w)
 	w.Header().Set("Content-Type", "application/json")
 	jsonStr, _ := json.Marshal(scaffold.GetConfig())
-	fmt.Fprintf(w, "%s", jsonStr)
+	_, _ = fmt.Fprintf(w, "%s", jsonStr)
 }
 
 // setCORSHeaders sets CORS Headers on the response if the Origin header exists on the request
@@ -181,22 +181,14 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 		p.Modules = asModuleArray(modules)
 	}
 
-	useDekorate, _ := strconv.ParseBool(params.Get("dekorate"))
-	if useDekorate {
-		// make sure we have dekorate as a dependency
-		p.Modules = append(p.Modules, scaffold.Module{Name: "dekorate"})
-	}
+	// we always use halkyon so make sure we have halkyon (via dekorate starter) as a dependency
+	p.Modules = append(p.Modules, scaffold.Module{Name: "halkyon"})
 
 	if hasModules && p.Template != "custom" {
-		if useDekorate {
-			// if we asked to use dekorate, keep the template value but reset the modules to only dekorate to avoid incompatibilities
-			p.Modules = []scaffold.Module{{Name: "dekorate"}}
-		} else {
-			// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
-			// when a user selects a different template. This is because we would like to avoid to populate a project with starters
-			// which are incompatible or not fully tested with the template proposed
-			p.Template = "custom"
-		}
+		// As dependencies and template selection can't be used together, we force the template to be equal to "custom"
+		// when a user selects a different template. This is because we would like to avoid to populate a project with starters
+		// which are incompatible or not fully tested with the template proposed
+		p.Template = "custom"
 	}
 
 	log.Infof("Received request: %s", r.URL)
@@ -226,7 +218,7 @@ func CreateZipFile(w http.ResponseWriter, r *http.Request) {
 func respondWith(msg string, status int, w http.ResponseWriter) {
 	log.Info(msg)
 	w.WriteHeader(status)
-	w.Write([]byte(msg))
+	_, _ = w.Write([]byte(msg))
 }
 
 func removeTempDir(tmpdir string) {
