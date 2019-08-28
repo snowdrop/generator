@@ -16,24 +16,10 @@
 
 package {{.PackageName}};
 
-{{$hasDekorate := .HasDekorate}}
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-{{if $hasDekorate}}
-import io.dekorate.kubernetes.annotation.KubernetesApplication;
-import io.dekorate.kubernetes.annotation.Env;
-import io.dekorate.openshift.annotation.OpenshiftApplication;
-{{end}}
 
 @SpringBootApplication
-{{if $hasDekorate}}
-@KubernetesApplication
-@OpenshiftApplication(
-        envVars = @Env(name = "JAVA_OPTIONS", value = "-Dspring.profiles.active=openshift"),
-        expose = true
-)
-{{end}}
 public class CrudApplication {
 
     public static void main(String[] args) {

@@ -15,22 +15,13 @@
  */
 package {{.PackageName}};
 
-{{$hasDekorate := .HasDekorate }}
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-{{if $hasDekorate}}
-import io.dekorate.kubernetes.annotation.KubernetesApplication;
-import io.dekorate.openshift.annotation.OpenshiftApplication;
-{{end}}
 
 /**
  * Entry point to the application.
  */
 @SpringBootApplication
-{{if $hasDekorate}}
-@KubernetesApplication
-@OpenshiftApplication
-{{end}}
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

@@ -18,7 +18,7 @@ func TestVfsSimpleJavaProject(t *testing.T) {
 	tExpectedFiles := []string{
 		"custom/pom.xml",
 		"custom/src/main/java/dummy/DemoApplication.java",
-		"custom/src/main/resources/application.properties",
+		"custom/src/main/resources/application-kubernetes.properties",
 	}
 
 	tFiles := walkTree()

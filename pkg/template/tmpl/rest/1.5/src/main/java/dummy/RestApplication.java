@@ -15,22 +15,12 @@
  */
 package {{.PackageName}};
 
-{{$hasDekorate := .HasDekorate}}
-
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-{{if $hasDekorate}}
-import io.dekorate.kubernetes.annotation.KubernetesApplication;
-import io.dekorate.openshift.annotation.OpenshiftApplication;
-{{end}}
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-{{if $hasDekorate}}
-@KubernetesApplication
-@OpenshiftApplication
-{{end}}
 public class RestApplication {
 
     public static void main(String[] args) {

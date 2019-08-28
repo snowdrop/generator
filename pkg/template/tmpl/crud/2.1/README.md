@@ -1,7 +1,7 @@
 ## To deploy using FMP:
 
 - oc apply -f database.yml
-- mvn fabric8:deploy -Popenshift
+- mvn fabric8:deploy -Pkubernetes
 
 ## To deploy using dekorate:
 
