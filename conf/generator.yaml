@@ -24,7 +24,6 @@ bomversions:
     supported: 2.1.6.Final-redhat-00001
     default: true
 extraProperties:
-  fmpVersion: 3.5.41
   dekorateVersion: 0.8.1
 modules:
   - name: core

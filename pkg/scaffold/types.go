@@ -102,7 +102,6 @@ type Bom struct {
 }
 
 type ExtraProperties struct {
-	FmpVersion      string `yaml:"fmpVersion" json:"fmpVersion"`
 	DekorateVersion string `json:"dekorateVersion"`
 }
 
