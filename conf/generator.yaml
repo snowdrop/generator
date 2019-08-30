@@ -23,7 +23,7 @@ bomversions:
     snowdrop: 2.1.6.SP3
     default: true
 extraProperties:
-  dekorateVersion: 0.8.1
+  dekorateVersion: 0.8.2
 modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"
