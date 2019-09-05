@@ -106,7 +106,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <excludeGroupIds>io.dekorate</excludeGroupIds>
+          <excludeGroupIds>io.dekorate,io.sundr</excludeGroupIds>
         </configuration>
         <executions>
           <execution>
