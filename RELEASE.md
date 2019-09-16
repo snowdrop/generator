@@ -6,7 +6,7 @@ Simply create a release using the script `./scripts/tag_release_manually.sh` whe
 `ID` of the release to be created :
 
 ```bash
-./scripts/tag_release_manually.sh GITHUB_API_TOKEN VERSION
+./script/tag_release_manually.sh GITHUB_API_TOKEN VERSION
 ```
 
 where `VERSION` corresponds to a string starting with the prefix `release-` and next by the number of the release (e.g release-0.0.1, release-0.0.2, .... release-0.0.n)
@@ -14,7 +14,7 @@ where `VERSION` corresponds to a string starting with the prefix `release-` and 
 Example
 
 ```bash
-./scripts/tag_release_manually.sh  aaaabbbbcccccdddddeeeeeffff release-0.0.1
+./script/tag_release_manually.sh  aaaabbbbcccccdddddeeeeeffff release-0.0.1
 ```
 
 This will cause `CircleCI` to perform a build/release and will create a GitHub release named `0.0.x`
