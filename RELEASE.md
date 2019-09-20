@@ -16,7 +16,7 @@ Example
 ```bash
 ./script/tag_release_manually.sh  aaaabbbbcccccdddddeeeeeffff release-0.0.1
 ```
-This script will check agains `origin/master` if there are assets to commit/push to the remote repository.
+This script will check against remote `origin/master` if there are assets to commit/push.
 This will cause `CircleCI` to perform a build/release and will create a GitHub release named `0.0.x`
 that will contain the built binaries for both MacOS and Linux.
 
