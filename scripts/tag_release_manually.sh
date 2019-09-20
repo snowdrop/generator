@@ -15,34 +15,25 @@ require_clean_go_assets () {
     git update-index -q --ignore-submodules --refresh
     err=0
 
-    # Disallow unstaged changes in the working tree
-    if ! git diff-files --quiet --ignore-submodules --
-    then
-        DIFF_FILES="$(git diff-files --ignore-submodules)"
-        if [[ $DIFF_FILES == *"pkg/template/assets_vfsdata.go"* ]]; then
-            echo >&2 "cannot $1: you have assets unstaged changes."
-            git diff-files --name-status -r --ignore-submodules -- >&2
-            err=1
-        fi
-    fi
-
-    # Disallow uncommitted changes in the index
-    if ! git diff-index --cached --quiet HEAD --ignore-submodules --
-    then
-        DIFF_INDEX="$(git diff-index --cached HEAD --ignore-submodules --)"
-        if [[ $DIFF_INDEX == *"pkg/template/assets_vfsdata.go"* ]]; then
-            echo >&2 "cannot $1: your index contains uncommitted changes."
-            git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
-            err=1
-        fi
-    fi
-
-    if [ $err = 1 ]
-    then
+    if git diff pkg/template/assets_vfsdata.go | grep -q 'pkg/template/assets_vfsdata.go'; then
+      echo >&2 "cannot tag: you have assets unstaged changes."
+        git diff-files --name-status -r --ignore-submodules -- pkg/template/assets_vfsdata.go >&2
+        echo >&2 -e "\n"
         echo >&2 "Please commit or stash them."
+        echo >&2 -e "\n"
+        exit 1
+    fi
+
+    if git diff --stat --cached origin/master -- pkg/template/assets_vfsdata.go | grep -q 'pkg/template/assets_vfsdata.go'; then
+      echo >&2 "cannot tag: your index contains assets uncommitted changes."
+        git diff --stat --cached origin/master -- pkg/template/assets_vfsdata.go >&2
+        echo >&2 -e "\n"
+        echo >&2 "Please push or reset them."
+        echo >&2 -e "\n"
         exit 1
     fi
 }
+
 
 require_clean_go_assets
 
