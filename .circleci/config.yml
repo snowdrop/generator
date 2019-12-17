@@ -52,7 +52,7 @@ jobs:
             if [[ "${CIRCLE_TAG}" =~ ${tagRE} ]]; then
               VERSION=${BASH_REMATCH[1]}
 
-              docker build -t spring-boot-generator:${VERSION} -f docker/Dockerfile_generator --build-arg VERSION=${VERSION} --build-arg GITCOMMIT=$(git rev-parse --short HEAD 2>/dev/null) .
+              docker build -t spring-boot-generator:${VERSION} -f config/Dockerfile_generator --build-arg VERSION=${VERSION} --build-arg GITCOMMIT=$(git rev-parse --short HEAD 2>/dev/null) .
               TAG_ID=$(docker images -q spring-boot-generator:${VERSION})
               docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:${VERSION}
               docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:latest
