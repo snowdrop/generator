@@ -51,7 +51,7 @@ metadata:
 spec:
   ports:
   - name: 8000-tcp
-    port: 8000
+    port: 80
     protocol: TCP
     targetPort: 8080
   type: ClusterIP
