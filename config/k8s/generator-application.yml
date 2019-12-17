@@ -33,20 +33,6 @@ spec:
         - containerPort: 8080
           name: http
           protocol: TCP
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 15
-          timeoutSeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 30
-          timeoutSeconds: 10
-          periodSeconds: 20
         volumeMounts:
         - name: config-volume
           mountPath: /etc/config
