@@ -40,6 +40,7 @@ spec:
         - name: config-volume
           configMap:
             name: spring-boot-generator
+
 ---
 apiVersion: v1
 kind: Service
@@ -56,3 +57,24 @@ spec:
   type: ClusterIP
   selector:
     app: spring-boot-generator
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  name: spring-boot-generator
+spec:
+  rules:
+    - host: generator.snowdrop.me
+      http:
+        paths:
+          - backend:
+              serviceName: spring-boot-generator
+              servicePort: 80
+            path: /
+  tls:
+    - hosts:
+      - generator.snowdrop.me
+      secretName: spring-boot-generator-io-tls
