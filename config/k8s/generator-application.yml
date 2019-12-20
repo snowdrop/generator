@@ -76,5 +76,5 @@ spec:
             path: /
   tls:
     - hosts:
-      - generator.snowdrop.me
-      secretName: spring-boot-generator-io-tls
+        - generator.snowdrop.me
+      secretName: generator-snowdrop-me-tls
