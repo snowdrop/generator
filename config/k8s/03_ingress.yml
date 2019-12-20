@@ -23,5 +23,7 @@ spec:
   tls:
     - hosts:
         - generator.snowdrop.me
+      secretName: www-snowdrop-me-tls
+    - hosts:
         - generator.snowdrop.dev
-      secretName: generator-snowdrop-me-tls
+      secretName: www-snowdrop-dev-tls
