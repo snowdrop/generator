@@ -23,6 +23,10 @@ bomversions:
     snowdrop: 2.1.6.SP3
     supported: 2.1.6.SP3-redhat-00001
     default: true
+  - community: 2.1.12.RELEASE
+    snowdrop: 2.1.12.Final
+    supported: 2.1.12.Final-redhat-00001
+    default: true
 extraProperties:
   dekorateVersion: 0.8.2
 modules:
