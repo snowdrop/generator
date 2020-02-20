@@ -28,7 +28,7 @@ bomversions:
     supported: 2.1.12.Final-redhat-00001
     default: true
 extraProperties:
-  dekorateVersion: 0.8.2
+  dekorateVersion: 0.10.10
 modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"
