@@ -25,9 +25,14 @@ bomversions:
   - community: 2.1.12.RELEASE
     snowdrop: 2.1.12.Final
     supported: 2.1.12.Final-redhat-00001
+  - community: 2.1.13.RELEASE
+    snowdrop: 2.1.13.Final
+    supported: 2.1.13.Final-redhat-00001
+  - community: 2.2.6.RELEASE
+    snowdrop: 2.2.6.Final
     default: true
 extraProperties:
-  dekorateVersion: 0.10.10
+  dekorateVersion: 1.0.0
 modules:
   - name: core
     description: "Core dependencies of a Spring Boot application"
