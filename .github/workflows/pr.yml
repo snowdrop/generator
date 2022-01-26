@@ -1,0 +1,23 @@
+name: "Build"
+on:
+  push:
+    branches:        
+      - '*'
+jobs:
+  build:
+    name: Build Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.9'
+      - name: Get dependencies and do test
+        run: |
+          go get -v -t -d
+          go test -v
+      - name: Generate assets
+        run: make assets
+      - name: Build
+        run: go build -o generator *.go

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/snowdrop/generator/pkg/server"
+	server "github.com/snowdrop/generator/pkg/server"
 )
 
 var (

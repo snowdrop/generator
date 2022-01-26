@@ -1,0 +1,56 @@
+name: "Update Image in Quay.io"
+on:
+  push:
+    tags:        
+      - 'release-*'
+jobs:
+  push:
+    name: Push Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.9'
+      - name: Install gox
+        run: go get github.com/mitchellh/gox
+      - name: Install file
+        run: sudo apt-get install file
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: release
+        run: |
+          tagRE='release-(.*)'
+          if [[ "${{ env.RELEASE_VERSION }}" =~ ${tagRE} ]]; then
+            # This will use gox to create the artifacts and the scripts in scripts to do the actual release
+            # For the is to work, the GH_TOKEN env var needs to be set in the repo config
+            make upload VERSION=${BASH_REMATCH[1]}
+          else
+            echo "${{ env.RELEASE_VERSION }} does NOT match the expected pattern. This is probably a job configuration issue"
+            exit 1
+          fi
+      - name: push image
+        run: |
+          tagRE='release-(.*)'
+          if [[ "${{ env.RELEASE_VERSION }}" =~ ${tagRE} ]]; then
+            VERSION=${BASH_REMATCH[1]}
+
+            docker build -t spring-boot-generator:${VERSION} -f config/Dockerfile_generator --build-arg VERSION=${VERSION} --build-arg GITCOMMIT=$(git rev-parse --short HEAD 2>/dev/null) .
+            TAG_ID=$(docker images -q spring-boot-generator:${VERSION})
+            docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:${VERSION}
+            docker tag ${TAG_ID} quay.io/snowdrop/spring-boot-generator:latest
+            docker login quay.io -u="${{secrets.QUAY_USER}}" -p="${{secrets.QUAY_TOKEN}}"
+            docker push quay.io/snowdrop/spring-boot-generator:${VERSION}
+            docker push quay.io/snowdrop/spring-boot-generator:latest
+
+            # Remove the trigger tag
+            scripts/delete_release_manually.sh "${{secrets.GH_TOKEN}" "${{ env.RELEASE_VERSION }}"
+
+            # Add the commits that correspond to the tag to the description of the GitHub reelase
+            scripts/update_release_change_log.sh "${GITHUB_API_TOKEN}" "v${VERSION}"
+          else
+            echo "${{ env.RELEASE_VERSION }} does NOT match the expected pattern. This is probably a job configuration issue"
+            exit 1
+          fi
+          
