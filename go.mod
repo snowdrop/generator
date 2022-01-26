@@ -5,11 +5,14 @@ go 1.9
 require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/ghodss/yaml v1.0.0
-	github.com/gorilla/context v1.1.1
+	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2
+	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/onsi/gomega v1.18.0 // indirect
 	github.com/shurcooL/httpfs v0.0.0-20171119174359-809beceb2371
 	github.com/sirupsen/logrus v1.0.6
-	golang.org/x/crypto v0.0.0-20180820150726-614d502a4dac
-	golang.org/x/sys v0.0.0-20180828065106-d99a578cf41b
-	gopkg.in/yaml.v2 v2.2.1
+	github.com/stretchr/testify v1.7.0 // indirect
+	golang.org/x/tools v0.1.8 // indirect
+	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
+	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 )
