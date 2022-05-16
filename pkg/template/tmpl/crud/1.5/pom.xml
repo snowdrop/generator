@@ -35,7 +35,7 @@
 
   <properties>
     <awaitility.version>3.1.0</awaitility.version>
-    <postgresql.version>9.4.1212</postgresql.version>
+    <postgresql.version>42.3.3</postgresql.version>
     <rest-assured.version>3.1.0</rest-assured.version>
     <snowdrop-bom.version>{{.SnowdropBomVersion}}</snowdrop-bom.version>
     <spring-boot.version>{{.SpringBootVersion}}</spring-boot.version>
